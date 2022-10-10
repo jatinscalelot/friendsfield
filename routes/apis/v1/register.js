@@ -16,7 +16,7 @@ router.post('/sendotp', async (req, res) => {
         client.messages.create({
             from: process.env.TWILIO_MOBILE,
             to: '+'+mobileno,
-            body: "Your OTP: " + otp.toString()
+            body: otp.toString()+" is the OTP for FreindsField Registration, This otp valid for 2 minutes"
         }).then(async (response) => {
             let primary = mongoConnection.useDb(constants.DEFAULT_DB);
             let userdata = await primary.model(constants.MODELS.users, usersModel).findOne({ conatct_no: mobileno }).lean();
@@ -82,7 +82,7 @@ router.post('/changenumber', helper.authenticateToken, async (req, res) => {
                                 client.messages.create({
                                     from: process.env.TWILIO_MOBILE,
                                     to: '+'+mobileno,
-                                    body: "Your OTP: " + otp.toString()
+                                    body: otp.toString()+" is the OTP for FreindsField New Number Registration, This otp valid for 2 minutes"
                                 }).then(async (response) => {
                                    let obj = {
                                         last_sent_otp : otp.toString(),

@@ -11,6 +11,7 @@ var multipartMap = {
 var partNum = 0;
 var partSize = 1024 * 1024 * 5;
 var numPartsLeft = 0;
+const acl = 'public-read';
 const getBlobName = (originalName) => {
     const identifier = Math.random().toString().replace(/0\./, '');
     return `${identifier}-${originalName}`;
@@ -53,7 +54,8 @@ async function saveToS3Multipart(buffer, parentfolder, contentType, sendorreceiv
                             Bucket: bucket,
                             Key: blobName,
                             PartNumber: String(partNum),
-                            UploadId: multipart.UploadId
+                            UploadId: multipart.UploadId,
+                            ACL : acl
                         };
                         s3.uploadPart(partParams, function (multiErr, mData) {
                             if (multiErr) {
@@ -73,7 +75,8 @@ async function saveToS3Multipart(buffer, parentfolder, contentType, sendorreceiv
                             Bucket: bucket,
                             Key: blobName,
                             MultipartUpload: multipartMap,
-                            UploadId: multipart.UploadId
+                            UploadId: multipart.UploadId,
+                            ACL : acl
                         };
                         s3.completeMultipartUpload(doneParams, function (err, data) {
                             if (err) {
@@ -104,7 +107,7 @@ async function saveToS3(buffer, parentfolder, contentType, sendorreceive){
                 Key: blobName,
                 Body: buffer,
                 ContentType: contentType,
-                ACL: 'public-read'
+                ACL: acl
             };
             s3.upload(putParams, (err, data) => {
                 if (err) {
@@ -131,7 +134,8 @@ async function saveToS3withFileName(buffer, parentfolder, contentType, filename)
                 Bucket: bucket,
                 Key: blobName,
                 Body: buffer,
-                ContentType: contentType
+                ContentType: contentType,
+                ACL : acl
             };
             s3.upload(putParams, (err, data) => {
                 if (err) {

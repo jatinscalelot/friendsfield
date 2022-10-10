@@ -41,4 +41,5 @@ const allowedContentTypes = [
     { extn: '3gp2', mimeType: 'video/3gpp2', fName: 'VID' },
     { extn: '3gp2', mimeType: 'audio/3gpp2', fName: 'VID' },
 ];
-module.exports = { allowedContentTypes };
+const imagearray = ['image/webp', 'image/png', 'image/jpeg', 'image/gif', 'image/bmp', 'image/vnd.microsoft.icon', 'image/tiff', 'image/svg+xml'];
+module.exports = { allowedContentTypes, imagearray };
