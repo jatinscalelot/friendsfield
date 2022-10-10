@@ -35,7 +35,8 @@ const apispaths = [
 	{ pathUrl: '/profile', routeFile: 'profile' },
 	{ pathUrl: '/business', routeFile: 'business' },
   { pathUrl: '/product', routeFile: 'product' },
-  { pathUrl: '/notification', routeFile: 'notification' }
+  { pathUrl: '/notification', routeFile: 'notification' },
+  { pathUrl: '/upload', routeFile: 'upload' }
 ];
 apispaths.forEach((path) => {
 	app.use('/apis/v1' + path.pathUrl, require('./routes/apis/v1/' + path.routeFile));
