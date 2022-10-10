@@ -35,6 +35,7 @@ router.post('/setprofile', helper.authenticateToken, multerFn.memoryUpload.singl
 							}
 							return responseManager.onSuccess('file added successfully...', obj, res);
 						}).catch((err) => {
+                            console.log('err', err);
 							return responseManager.onError(err, res);
 						});
 					} else {
