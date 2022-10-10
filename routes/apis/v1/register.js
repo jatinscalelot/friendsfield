@@ -74,23 +74,32 @@ router.post('/changenumber', helper.authenticateToken, async (req, res) => {
                 let userdata = await primary.model(constants.MODELS.users, usersModel).findById(req.token.userid).lean();
                 if(userdata){
                     if(userdata.conatct_no == oldcountryCode+oldcontactNo){
-                        let mobileno = newcountryCode+newcontactNo;
-                        let otp = Math.floor(1000 + Math.random() * 9000);
-                        client.messages.create({
-                            from: process.env.TWILIO_MOBILE,
-                            to: '+'+mobileno,
-                            body: "Your OTP: " + otp.toString()
-                        }).then(async (response) => {
-                           let obj = {
-                                last_sent_otp : otp.toString(),
-                                otp_timestamp : Date.now(),
-                                new_contact_number : mobileno
-                           };
-                           await primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(userdata._id, obj);
-                           return responseManager.onSuccess('Otp sent successfully!', 1, res);
-                        }).catch((error) => {
-                            return responseManager.onError(error, res);
-                        });
+                        if(newcountryCode+newcontactNo != oldcountryCode+oldcontactNo){
+                            let existingUser = await primary.model(constants.MODELS.users, usersModel).findOne({conatct_no : newcountryCode+newcontactNo}).lean();
+                            if(existingUser == null){
+                                let mobileno = newcountryCode+newcontactNo;
+                                let otp = Math.floor(1000 + Math.random() * 9000);
+                                client.messages.create({
+                                    from: process.env.TWILIO_MOBILE,
+                                    to: '+'+mobileno,
+                                    body: "Your OTP: " + otp.toString()
+                                }).then(async (response) => {
+                                   let obj = {
+                                        last_sent_otp : otp.toString(),
+                                        otp_timestamp : Date.now(),
+                                        new_contact_number : mobileno
+                                   };
+                                   await primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(userdata._id, obj);
+                                   return responseManager.onSuccess('Otp sent successfully!', 1, res);
+                                }).catch((error) => {
+                                    return responseManager.onError(error, res);
+                                });
+                            }else{
+                                return responseManager.badrequest({message : 'New number already exist with other user, please try again'}, res);
+                            }
+                        }else{
+                            return responseManager.badrequest({message : 'Old number and new number can not be identical, please try again'}, res);
+                        }
                     }else{
                         return responseManager.badrequest({message : 'Invalid Old Number to update, please try again'}, res);
                     }
