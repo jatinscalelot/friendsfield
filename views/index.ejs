@@ -1,76 +1,295 @@
 <body>
   <div class="main flex items-start overflow-hidden">
-    <aside class="">
-      <div class="w-full flex items-center border-b h-20 px-5">
-        <h3><a href="addproduct.html" class="icon-left-arrow mr-4"></a> Products</h3>
+    <aside>
+      <div class="w-full flex items-center h-20 px-3.5 relative">
+          <a href="Profile.html" class="hidden md:flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-full bg-slate-200 flex p-2 pb-0 overflow-hidden">
+                <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+              </div>
+              <div>
+                <h4>Hi,</h4>
+                <h4>Caroline Case</h4>
+              </div>
+          </a>
+          <span class="flex px-1 text-2xl ml-auto text-chatlook-dark">
+            <a href="addproduct.html" class="icon-store"></a>
+          </span>       
+          <span class="flex px-1 text-xl ml-2 text-chatlook-dark" onclick="toggleFunction('chat-drop', 'open')">
+            <a href="#" class="icon-Group-2"></a>
+          </span> 
+          <!-- chat-dropdown  -->
+          <div id="chat-drop" class="p-3.5 shadow-one bg-white absolute top-16 right-5 z-20 space-y-3 rounded-md min-w-[120px] scale-y-0 origin-top visited:hidden anim">
+            <h4><a href="Marketing.html">Marketing</a></h4>
+            <h4><a href="friend-request.html">Requests</a></h4>
+            <h4><a href="setting.html">Settings</a></h4>
+          </div> 
       </div>
-      <div class="w-full pt-4 ">
-        <div class="pt-5">
-          <div class="flex items-center border-b pb-5 px-5">
-            <a href="add-new-product.html" class="w-14 h-14 rounded-lg bg-chatlook-grayLight inline-block"><span class="icon-plus text-2xl flex items-center justify-center w-full h-full"></span></a>
-            <div class="ml-4">
-              <h4 class="text-base text-chatlook-sky font-bold">Add New Product</h4>
-            </div>
-          </div>
-          <a href="product-details.html" class="flex border-b py-5 px-5">
-            <img src="assest/images/product.png" alt="" class="w-14 h-14 object-cover rounded-lg"/>
-            <div class="ml-4">
-              <h4>Cup Cake</h4>
-              <span class="text-chatlook-gray leading-5 font-normal pt-1.5">There are many variations to have...</span>
-              <div class="flex  items-center space-x-2 pt-[2px]">
-                <span class="bg-[#FC5858] text-white p-1 rounded-md">20% off</span>
-                <h4 class="text-chatlook-sky font-normal">$50.00</h4>
-              </div>
-            </div>
-          </a>
-          <a href="product-details.html" class="flex border-b py-5 px-5">
-            <img src="assest/images/product.png" alt="" class="w-14 h-14 object-cover rounded-lg"/>
-            <div class="ml-4">
-              <h4>Cup Cake</h4>
-              <span class="text-chatlook-gray leading-5 font-normal pt-1.5">There are many variations to have...</span>
-              <div class="flex  items-center space-x-2 pt-[2px]">
-                <span class="bg-[#FC5858] text-white p-1 rounded-md">20% off</span>
-                <h4 class="text-chatlook-sky font-normal">$50.00</h4>
-              </div>
-            </div>
-          </a>
-          <a href="product-details.html" class="flex border-b py-5 px-5">
-            <img src="assest/images/product.png" alt="" class="w-14 h-14 object-cover rounded-lg"/>
-            <div class="ml-4">
-              <h4>Cup Cake</h4>
-              <span class="text-chatlook-gray leading-5 font-normal pt-1.5">There are many variations to have...</span>
-              <div class="flex items-center space-x-2 pt-[2px]">
-                <span class="bg-[#FC5858] text-white p-1 rounded-md">20% off</span>
-                <h4 class="text-chatlook-sky font-normal">$50.00</h4>
-              </div>
-            </div>
-          </a>
+       <!-- tab-btn & search-bar -->
+      <div class="aside-tabs w-full px-3.5">
+          <!-- tab-header  -->
+          <div class="tab-menu flex justify-between p-[10px] bg-chatlook-grayLight rounded-md">
+            <a href="chat-details.html" class="py-2 px-6 bg-white text-chatlook-sky text-sm font-medium uppercase shadow rounded-md">Chats</a>
+            <a href="status.html" class="py-2 px-6 text-sm font-medium  uppercase">Status</a>
+            <a href="call-log.html" class="py-2 px-6 text-sm font-medium  uppercase">Calls</a>
         </div>
-      </div>
-    </aside>
-    <div class="main-content">
-      <header class="z-50">
-        <div class="flex justify-between items-center w-full">
-          <h3><a href="#" class="icon-close inline-block text-chatlook-gray text-xl mr-4"></a>Add New Product</h3>
-          <button class="inline-block bg-chatlook-sky text-white uppercase rounded-md px-12 py-2.5 text-lg font-normal">Save</button>
-        </div>
-      </header>
-      <main class="relative px-5 pb-5">
-        <from class="flex flex-col items-center max-w-[615px] w-full mx-auto pt-7">
-          <div class="rounded-md h-80 w-full bg-chatlook-grayLight relative cursor-pointer">
-            <input type="file" name="" id="addproduct" class="hidden w-full h-full">
-            <label for="addproduct" class="">
-              <span class="icon-image flex items-center justify-center w-full h-full text-6xl"></span>
-              <h3 class="text-chatlook-gray absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2">Add Image</h3>
+          <!-- search-bar  -->
+          <div class="tab-search py-4 flex items-center space-x-3">
+            <label for="search" class="w-[calc(100%-52px)] py-2 px-3 flex items-center rounded-md border border-chatlook-grayLight">
+              <input type="search" name="Search" id="Search" placeholder="Search" class="w-full outline-none">
+              <i class="icon-search"></i>
             </label>
+            <a href="find-friends.html" class="text-xl w-10 h-10 flex items-center justify-center bg-chatlook-sky shadow rounded-lg text-[#8094ae]">
+              <i class="icon-location" aria-hidden="true"></i>
+            </a>
           </div>
-          <input type="text" placeholder="Product Name" class="w-full bg-chatlook-grayLight rounded-md mt-5 p-4">
-          <input type="text" placeholder="Product Price" class="w-full bg-chatlook-grayLight rounded-md mt-5 p-4">
-          <textarea name="" id="" rows="4"  placeholder="Product Description" class="w-full bg-chatlook-grayLight p-4 mt-5 placeholder:text-sm focus-visible:outline-none resize-none rounded-md"></textarea>
-          <input type="text" placeholder="Offers" class="w-full bg-chatlook-grayLight rounded-md mt-5 p-4">
-          <input type="text" placeholder="Product Code" class="w-full bg-chatlook-grayLight rounded-md mt-5 p-4">
-        </from>
-      </main>
+      </div>
+        <!-- all tabs -->
+      <div class="w-full px-3.5 h-[calc(100vh-208px)] overflow-y-auto"> 
+      <!-- all tabs -->
+      <div class="tab-holder">
+          <div class="chats-holder" id="chats">
+              <div class="p-3 notifications-box">
+                <a href="notifications.html" class="flex items-center space-x-3">
+                  <span class="text-xl w-10 h-10 flex items-center justify-center bg-chatlook-sky shadow rounded-full text-[#8094ae]">
+                  <i class="icon-bell"></i>
+                  </span>
+                  <div class="w-[calc(100%-54px)] mt-1">
+                    <div class="user-name flex justify-between">
+                      <h4 class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden capitalize">notifications</h4>
+                      <span class="text-chatlook-sky">15:25</span>
+                    </div>
+                    <div class="flex justify-between mt-1 items-center">
+                      <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden capitalize">Advertisement</span>
+                      <span class="p-1 bg-chatlook-sky text-white rounded-full">30</span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="p-3 notifications-box user-box rounded-lg">
+                <a href="chat-details.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-200 flex overflow-hidden">
+                      <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+                    </div>
+                    <div class="w-[calc(100%-54px)] mt-1">
+                        <div class="user-name flex justify-between">
+                          <h4 class="whitespace-nowrap w-[75%] overflow-ellipsis overflow-hidden capitalize">Personal</h4>
+                          <span>yesterday</span>
+                        </div>
+                        <div class="mt-2 flex items-center">
+                          <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden">Simply dummy text of the printing </span>
+                        </div>
+                    </div>
+                </a>
+              </div>
+              <div class="p-3 notifications-box user-box rounded-lg">
+                <a href="bisnuss&product-right-bar.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-200 flex overflow-hidden">
+                      <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+                    </div>
+                    <div class="w-[calc(100%-54px)] mt-1">
+                        <div class="user-name flex justify-between">
+                          <h4 class="whitespace-nowrap w-[75%] overflow-ellipsis overflow-hidden capitalize">Bisnuss</h4>
+                          <span>yesterday</span>
+                        </div>
+                        <div class="mt-2 flex items-center">
+                          <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden">Simply dummy text of the printing </span>
+                        </div>
+                    </div>
+                </a>
+              </div>
+              <div class="p-3 notifications-box user-box rounded-lg">
+                <a href="chat-details.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-200 flex overflow-hidden">
+                      <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+                    </div>
+                    <div class="w-[calc(100%-54px)] mt-1">
+                        <div class="user-name flex justify-between">
+                          <h4 class="whitespace-nowrap w-[75%] overflow-ellipsis overflow-hidden capitalize">notifications</h4>
+                          <span>yesterday</span>
+                        </div>
+                        <div class="mt-2 flex items-center">
+                          <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden">Simply dummy text of the printing </span>
+                        </div>
+                    </div>
+                </a>
+              </div>
+              <div class="p-3 notifications-box user-box rounded-lg">
+                  <a href="chat-details.html" class="flex items-center space-x-3">
+                      <div class="w-10 h-10 rounded-full bg-slate-200 flex overflow-hidden">
+                        <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+                      </div>
+                      <div class="w-[calc(100%-54px)] mt-1">
+                          <div class="user-name flex justify-between">
+                            <h4 class="whitespace-nowrap w-[75%] overflow-ellipsis overflow-hidden capitalize">notifications</h4>
+                            <span>yesterday</span>
+                          </div>
+                          <div class="mt-2 flex items-center">
+                            <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden">Simply dummy text of the printing </span>
+                          </div>
+                      </div>
+                  </a>
+              </div>
+              <div class="p-3 notifications-box user-box rounded-lg">
+                <a href="chat-details.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-200 flex overflow-hidden">
+                      <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+                    </div>
+                    <div class="w-[calc(100%-54px)] mt-1">
+                        <div class="user-name flex justify-between">
+                          <h4 class="whitespace-nowrap w-[75%] overflow-ellipsis overflow-hidden capitalize">notifications</h4>
+                          <span>yesterday</span>
+                        </div>
+                        <div class="mt-2 flex items-center">
+                          <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden">Simply dummy text of the printing </span>
+                        </div>
+                    </div>
+                </a>
+              </div>
+              <div class="p-3 notifications-box user-box rounded-lg">
+                <a href="chat-details.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-200 flex overflow-hidden">
+                      <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+                    </div>
+                    <div class="w-[calc(100%-54px)] mt-1">
+                        <div class="user-name flex justify-between">
+                          <h4 class="whitespace-nowrap w-[75%] overflow-ellipsis overflow-hidden capitalize">notifications</h4>
+                          <span>yesterday</span>
+                        </div>
+                        <div class="mt-2 flex items-center">
+                          <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden">Simply dummy text of the printing </span>
+                        </div>
+                    </div>
+                </a>
+              </div>
+              <div class="p-3 notifications-box user-box rounded-lg">
+                  <a href="chat-details.html" class="flex items-center space-x-3">
+                      <div class="w-10 h-10 rounded-full bg-slate-200 flex overflow-hidden">
+                        <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+                      </div>
+                      <div class="w-[calc(100%-54px)] mt-1">
+                          <div class="user-name flex justify-between">
+                            <h4 class="whitespace-nowrap w-[75%] overflow-ellipsis overflow-hidden capitalize">notifications</h4>
+                            <span>yesterday</span>
+                          </div>
+                          <div class="mt-2 flex items-center">
+                            <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden">Simply dummy text of the printing </span>
+                          </div>
+                      </div>
+                  </a>
+              </div>
+              <div class="p-3 notifications-box user-box rounded-lg">
+                <a href="chat-details.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-200 flex overflow-hidden">
+                      <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+                    </div>
+                    <div class="w-[calc(100%-54px)] mt-1">
+                        <div class="user-name flex justify-between">
+                          <h4 class="whitespace-nowrap w-[75%] overflow-ellipsis overflow-hidden capitalize">notifications</h4>
+                          <span>yesterday</span>
+                        </div>
+                        <div class="mt-2 flex items-center">
+                          <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden">Simply dummy text of the printing </span>
+                        </div>
+                    </div>
+                </a>
+              </div>
+              <div class="p-3 notifications-box user-box rounded-lg">
+                <a href="chat-details.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-200 flex overflow-hidden">
+                      <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+                    </div>
+                    <div class="w-[calc(100%-54px)] mt-1">
+                        <div class="user-name flex justify-between">
+                          <h4 class="whitespace-nowrap w-[75%] overflow-ellipsis overflow-hidden capitalize">notifications</h4>
+                          <span>yesterday</span>
+                        </div>
+                        <div class="mt-2 flex items-center">
+                          <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden">Simply dummy text of the printing </span>
+                        </div>
+                    </div>
+                </a>
+              </div>
+              <div class="p-3 notifications-box user-box rounded-lg">
+                  <a href="chat-details.html" class="flex items-center space-x-3">
+                      <div class="w-10 h-10 rounded-full bg-slate-200 flex overflow-hidden">
+                        <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+                      </div>
+                      <div class="w-[calc(100%-54px)] mt-1">
+                          <div class="user-name flex justify-between">
+                            <h4 class="whitespace-nowrap w-[75%] overflow-ellipsis overflow-hidden capitalize">notifications</h4>
+                            <span>yesterday</span>
+                          </div>
+                          <div class="mt-2 flex items-center">
+                            <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden">Simply dummy text of the printing </span>
+                          </div>
+                      </div>
+                  </a>
+              </div>
+              <div class="p-3 notifications-box user-box rounded-lg">
+                <a href="chat-details.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-200 flex overflow-hidden">
+                      <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+                    </div>
+                    <div class="w-[calc(100%-54px)] mt-1">
+                        <div class="user-name flex justify-between">
+                          <h4 class="whitespace-nowrap w-[75%] overflow-ellipsis overflow-hidden capitalize">notifications</h4>
+                          <span>yesterday</span>
+                        </div>
+                        <div class="mt-2 flex items-center">
+                          <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden">Simply dummy text of the printing </span>
+                        </div>
+                    </div>
+                </a>
+              </div>
+              <div class="p-3 notifications-box user-box rounded-lg">
+                <a href="chat-details.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-200 flex overflow-hidden">
+                      <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+                    </div>
+                    <div class="w-[calc(100%-54px)] mt-1">
+                        <div class="user-name flex justify-between">
+                          <h4 class="whitespace-nowrap w-[75%] overflow-ellipsis overflow-hidden capitalize">notifications</h4>
+                          <span>yesterday</span>
+                        </div>
+                        <div class="mt-2 flex items-center">
+                          <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden">Simply dummy text of the printing </span>
+                        </div>
+                    </div>
+                </a>
+              </div>
+              <div class="p-3 notifications-box user-box rounded-lg">
+                  <a href="chat-details.html" class="flex items-center space-x-3">
+                      <div class="w-10 h-10 rounded-full bg-slate-200 flex overflow-hidden">
+                        <img src="/assest/images/woman.png" class="object-cover" alt="woman"/>
+                      </div>
+                      <div class="w-[calc(100%-54px)] mt-1">
+                          <div class="user-name flex justify-between">
+                            <h4 class="whitespace-nowrap w-[75%] overflow-ellipsis overflow-hidden capitalize">notifications</h4>
+                            <span>yesterday</span>
+                          </div>
+                          <div class="mt-2 flex items-center">
+                            <span class="whitespace-nowrap w-[90%] overflow-ellipsis overflow-hidden">Simply dummy text of the printing </span>
+                          </div>
+                      </div>
+                  </a>
+              </div>
+          </div>
+      </div>
+      </div>               
+    </aside>
+    <div class="main-content" id="main-content">
+      <div class="relative h-screen flex items-center justify-center">
+        <div class="text-center p-3 w-full max-w-sm mx-auto">
+          <div class="w-36 h-36 flex items-center justify-center text-7xl rounded-full bg-chatlook-sky mx-auto">
+            <i class="icon-user icon-white"></i>
+          </div>
+          <div class="space-y-3 mt-6 mb-3">
+            <h5 class="text-4xl font-bold">Welcome</h5>
+            <h5 class="text-4xl font-normal text-chatlook-gray">+91 852 3652 456</h5>
+          </div>
+          <span class="chat pt-3 text-[#888888] text-base">Search for some to start chatting with or go to contacts to see who is available</span>                    
+        </div>
+      </div>
     </div>
   </div>
 </body>
