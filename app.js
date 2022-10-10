@@ -29,6 +29,7 @@ mongoose.connection.once('open', () => {
 }).on('error', error => {
   console.log("Oops! database connection error:" + error);
 });
+app.use('/', indexRouter);
 // Mobile App Routers
 const apispaths = [
 	{ pathUrl: '/register', routeFile: 'register' },
