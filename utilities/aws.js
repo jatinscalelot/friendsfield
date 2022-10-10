@@ -103,7 +103,8 @@ async function saveToS3(buffer, parentfolder, contentType, sendorreceive){
                 Bucket: bucket,
                 Key: blobName,
                 Body: buffer,
-                ContentType: contentType
+                ContentType: contentType,
+                ACL: 'public-read'
             };
             s3.upload(putParams, (err, data) => {
                 if (err) {
