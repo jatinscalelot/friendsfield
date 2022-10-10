@@ -108,10 +108,8 @@ async function saveToS3(buffer, parentfolder, contentType, sendorreceive){
             };
             s3.upload(putParams, (err, data) => {
                 if (err) {
-                    console.log('error in aws', err);
                     reject(new Error({msg: 'An error occurred while completing the upload'}));
                 }else{
-                    console.log('data', data);
                     resolve({msg: 'file uploaded successfully', data: data});
                 }
             });

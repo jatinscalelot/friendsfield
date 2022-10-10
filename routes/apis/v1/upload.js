@@ -31,11 +31,15 @@ router.post('/setprofile', helper.authenticateToken, multerFn.memoryUpload.singl
                     if (filesizeinMb <= 5) {
 						AwsCloud.saveToS3(req.file.buffer, userdata._id.toString(), req.file.mimetype, 'profile').then((result) => {
 							var obj = {
-								path: result.data
-							}
-							return responseManager.onSuccess('file added successfully...', obj, res);
+                                s3_url : process.env.AWS_BUCKET_URI,
+                                Key : result.data.Key
+							};
+                            primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(req.token.userid, {profileimage : result.data.Key}).then((updateprofileobj) => {
+                                return responseManager.onSuccess('file added successfully...', obj, res);
+                            }).catch((err) => {
+                                return responseManager.onError(err, res);
+                            });
 						}).catch((err) => {
-                            console.log('err', err);
 							return responseManager.onError(err, res);
 						});
 					} else {
