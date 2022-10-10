@@ -1,0 +1,241 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('./../fonts/icomoon.eot?3kfh3u');
+  src:  url('./../fonts/icomoon.eot?3kfh3u#iefix') format('embedded-opentype'),
+    url('./../fonts/icomoon.ttf?3kfh3u') format('truetype'),
+    url('./../fonts/icomoon.woff?3kfh3u') format('woff'),
+    url('./../fonts/icomoon.svg?3kfh3u#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-massage-send:before {
+  content: "\e901";
+  color: #5ac8d2;
+}
+.icon-info:before {
+  content: "\e900";
+  color: #5ac8d2;
+}
+.icon-logout:before {
+  content: "\e902";
+  color: #fc5858;
+}
+.icon-change-num:before {
+  content: "\e904";
+}
+.icon-blocked:before {
+  content: "\e905";
+}
+.icon-bell-border:before {
+  content: "\e906";
+}
+.icon-error:before {
+  content: "\e907";
+  color: #fc5858;
+}
+.icon-close-round:before {
+  content: "\e908";
+  color: #fc5858;
+}
+.icon-arrow-up:before {
+  content: "\e909";
+  color: #fff;
+}
+.icon-mark:before {
+  content: "\e90a";
+  color: #5ac8d2;
+}
+.icon-right-round:before {
+  content: "\e90b";
+  color: #888;
+}
+.icon-arrow-down:before {
+  content: "\e90c";
+  color: #5ac8d2;
+}
+.icon-xl-sheet:before {
+  content: "\e90d";
+  color: #888;
+}
+.icon-has:before {
+  content: "\e90f";
+  color: #5ac8d2;
+}
+.icon-cel-time:before {
+  content: "\e910";
+  color: #5ac8d2;
+}
+.icon-location-fill:before {
+  content: "\e913";
+  color: #2dcad4;
+}
+.icon-cross-top:before {
+  content: "\e914";
+  color: #fc5858;
+}
+.icon-cross-bottom:before {
+  content: "\e915";
+  color: #1dc843;
+}
+.icon-round-eye:before {
+  content: "\e916";
+  color: #5ac8d2;
+}
+.icon-subcategory:before {
+  content: "\e918";
+  color: #5ac8d2;
+}
+.icon-category:before {
+  content: "\e919";
+  color: #5ac8d2;
+}
+.icon-bag:before {
+  content: "\e91a";
+  color: #5ac8d2;
+}
+.icon-dislike:before {
+  content: "\e91b";
+  color: #fc5858;
+}
+.icon-age:before {
+  content: "\e91f";
+  color: #5ac8d2;
+}
+.icon-intrested:before {
+  content: "\e920";
+  color: #5ac8d2;
+}
+.icon-range:before {
+  content: "\e921";
+  color: #5ac8d2;
+}
+.icon-location-1:before {
+  content: "\e922";
+  color: #5ac8d2;
+}
+.icon-mail:before {
+  content: "\e923";
+  color: #5ac8d2;
+}
+.icon-call:before {
+  content: "\e924";
+  color: #5ac8d2;
+}
+.icon-massge:before {
+  content: "\e926";
+  color: #888;
+}
+.icon-minimize:before {
+  content: "\e927";
+  color: #888;
+}
+.icon-call-up:before {
+  content: "\e928";
+  color: #fff;
+}
+.icon-call-down:before {
+  content: "\e929";
+  color: #fff;
+}
+.icon-makie:before {
+  content: "\e92a";
+  color: #888;
+}
+.icon-sound:before {
+  content: "\e92b";
+  color: #888;
+}
+.icon-maximize:before {
+  content: "\e92d";
+  color: #888;
+}
+.icon-send:before {
+  content: "\e92e";
+  color: #fff;
+}
+.icon-camera:before {
+  content: "\e92f";
+  color: #888;
+}
+.icon-image:before {
+  content: "\e930";
+  color: #888;
+}
+.icon-smile:before {
+  content: "\e932";
+  color: #5ac8d2;
+}
+.icon-phone:before {
+  content: "\e933";
+  color: #fff;
+}
+.icon-video:before {
+  content: "\e934";
+  color: #fff;
+}
+.icon-bell:before {
+  content: "\e935";
+  color: #fff;
+}
+.icon-location:before {
+  content: "\e936";
+  color: #fff;
+}
+.icon-search:before {
+  content: "\e937";
+  color: #aaa;
+}
+.icon-Group-2:before {
+  content: "\e938";
+}
+.icon-store:before {
+  content: "\e939";
+}
+.icon-user:before {
+  content: "\e93a";
+  color: #888;
+}
+.icon-delete:before {
+  content: "\e93b";
+  color: #fc5858;
+}
+.icon-Add-image:before {
+  content: "\e93c";
+  color: #888;
+}
+.icon-plus:before {
+  content: "\e93d";
+  color: #5ac8d2;
+}
+.icon-aroow-down:before {
+  content: "\e93e";
+}
+.icon-pen:before {
+  content: "\e93f";
+  color: #fff;
+}
+.icon-close:before {
+  content: "\e940";
+  color: #888;
+}
+.icon-left-arrow:before {
+  content: "\e941";
+  color: #5ac8d2;
+}
