@@ -9,9 +9,20 @@ var multer = require('multer');
 var fs = require('fs');
 let mongoose = require("mongoose");
 var expressLayouts = require('express-ejs-layouts');
+var session = require("express-session");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var app = express();
+const oneDay = 1000 * 60 * 60 * 24;
+app.use(
+  session({
+      cookie: { sameSite: "lax", maxAge: oneDay },
+      resave: true,
+      secret: process.env.WEB_LOGIN_AUTH_TOKEN,
+      activeDuration: 5 * 60 * 1000,
+      saveUninitialized: true
+  })
+);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
@@ -32,6 +43,15 @@ mongoose.connection.once('open', () => {
   console.log("Oops! database connection error:" + error);
 });
 app.use('/', indexRouter);
+// Web App Routers
+const webpaths = [
+  { pathUrl: '/', routeFile: 'login' },
+  { pathUrl: '/otp', routeFile: 'otp' },
+  { pathUrl: '/profile', routeFile: 'profile' }
+];
+webpaths.forEach((path) => {
+	app.use(path.pathUrl, require('./routes/web/' + path.routeFile));
+});
 // Mobile App Routers
 const apispaths = [
 	{ pathUrl: '/register', routeFile: 'register' },

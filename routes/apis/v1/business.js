@@ -59,39 +59,128 @@ router.post('/setbusinessprofile', helper.authenticateToken, multerFn.memoryUplo
   if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
     let primary = mongoConnection.useDb(constants.DEFAULT_DB);
     let userdata = await primary.model(constants.MODELS.users, usersModel).findById(req.token.userid).lean();
-    let businessdata = await primary.model(constants.MODELS.business, businessModel).findOne({userid : mongoose.Types.ObjectId(req.token.userid)}).lean();
-    if (userdata && businessdata) {
-      if (req.file) {
-        if (allowedContentTypes.imagearray.includes(req.file.mimetype)) {
-          let filesizeinMb = parseFloat(parseFloat(req.file.size) / 1000000);
-          if (filesizeinMb <= 5) {
-            AwsCloud.saveToS3(req.file.buffer, userdata._id.toString(), req.file.mimetype, 'profile').then((result) => {
-              var obj = {
-                s3_url: process.env.AWS_BUCKET_URI,
-                Key: result.data.Key
-              };
-              primary.model(constants.MODELS.business, businessModel).findByIdAndUpdate(businessdata._id, { businessimage: result.data.Key }).then((updateprofileobj) => {
+    if (userdata) {
+      let businessdata = await primary.model(constants.MODELS.business, businessModel).findOne({userid : mongoose.Types.ObjectId(req.token.userid)}).lean();
+      if(businessdata){
+        if (req.file) {
+          if (allowedContentTypes.imagearray.includes(req.file.mimetype)) {
+            let filesizeinMb = parseFloat(parseFloat(req.file.size) / 1000000);
+            if (filesizeinMb <= 5) {
+              AwsCloud.saveToS3(req.file.buffer, userdata._id.toString(), req.file.mimetype, 'profile').then((result) => {
+                var obj = {
+                  s3_url: process.env.AWS_BUCKET_URI,
+                  Key: result.data.Key
+                };
+                primary.model(constants.MODELS.business, businessModel).findByIdAndUpdate(businessdata._id, { businessimage: result.data.Key }).then((updateprofileobj) => {
+                  return responseManager.onSuccess('file added successfully...', obj, res);
+                }).catch((err) => {
+                  return responseManager.onError(err, res);
+                });
+              }).catch((err) => {
+                return responseManager.onError(err, res);
+              });
+            } else {
+              return responseManager.badrequest({ message: 'Images files must be less than 5 mb to upload, please try again' }, res);
+            }
+          } else {
+            return responseManager.badrequest({ message: 'Invalid image file formate for business profile, please try again' }, res);
+          }
+        } else {
+          return responseManager.badrequest({ message: 'Invalid image file please upload valid file, and try again' }, res);
+        }
+      }else{
+        if (req.file) {
+          if (allowedContentTypes.imagearray.includes(req.file.mimetype)) {
+            let filesizeinMb = parseFloat(parseFloat(req.file.size) / 1000000);
+            if (filesizeinMb <= 5) {
+              AwsCloud.saveToS3(req.file.buffer, userdata._id.toString(), req.file.mimetype, 'profile').then((result) => {
+                var obj = {
+                  s3_url: process.env.AWS_BUCKET_URI,
+                  Key: result.data.Key
+                };
                 return responseManager.onSuccess('file added successfully...', obj, res);
               }).catch((err) => {
                 return responseManager.onError(err, res);
               });
-            }).catch((err) => {
-              return responseManager.onError(err, res);
-            });
+            } else {
+              return responseManager.badrequest({ message: 'Images files must be less than 5 mb to upload, please try again' }, res);
+            }
           } else {
-            return responseManager.badrequest({ message: 'Images files must be less than 5 mb to upload, please try again' }, res);
+            return responseManager.badrequest({ message: 'Invalid image file formate for business profile, please try again' }, res);
           }
         } else {
-          return responseManager.badrequest({ message: 'Invalid image file formate for business profile, please try again' }, res);
+          return responseManager.badrequest({ message: 'Invalid image file please upload valid file, and try again' }, res);
         }
-      } else {
-        return responseManager.badrequest({ message: 'Invalid image file please upload valid file, and try again' }, res);
       }
     } else {
       return responseManager.badrequest({ message: 'Invalid user to upload business profile, please try again' }, res);
     }
   } else {
     return responseManager.badrequest({ message: 'Invalid user to upload business profile, please try again' }, res);
+  }
+});
+router.post('/setbrochure', helper.authenticateToken, multerFn.memoryUpload.single("file"), async (req, res) => {
+  if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
+    let primary = mongoConnection.useDb(constants.DEFAULT_DB);
+    let userdata = await primary.model(constants.MODELS.users, usersModel).findById(req.token.userid).lean();
+    if (userdata) {
+      let businessdata = await primary.model(constants.MODELS.business, businessModel).findOne({userid : mongoose.Types.ObjectId(req.token.userid)}).lean();
+      if(businessdata){
+        if (req.file) {
+          if (allowedContentTypes.docarray.includes(req.file.mimetype)) {
+            let filesizeinMb = parseFloat(parseFloat(req.file.size) / 1000000);
+            if (filesizeinMb <= 25) {
+              AwsCloud.saveToS3(req.file.buffer, userdata._id.toString(), req.file.mimetype, 'brochure').then((result) => {
+                var obj = {
+                  s3_url: process.env.AWS_BUCKET_URI,
+                  Key: result.data.Key
+                };
+                primary.model(constants.MODELS.business, businessModel).findByIdAndUpdate(businessdata._id, { brochure: result.data.Key }).then((updateprofileobj) => {
+                  return responseManager.onSuccess('file added successfully...', obj, res);
+                }).catch((err) => {
+                  return responseManager.onError(err, res);
+                });
+              }).catch((err) => {
+                return responseManager.onError(err, res);
+              });
+            } else {
+              return responseManager.badrequest({ message: 'Images files must be less than 25 mb to upload brochure, please try again' }, res);
+            }
+          } else {
+            return responseManager.badrequest({ message: 'Invalid image file formate for business brochure, please try again' }, res);
+          }
+        } else {
+          return responseManager.badrequest({ message: 'Invalid image file please upload valid file, and try again' }, res);
+        }
+      }else{
+        if (req.file) {
+          if (allowedContentTypes.docarray.includes(req.file.mimetype)) {
+            let filesizeinMb = parseFloat(parseFloat(req.file.size) / 1000000);
+            if (filesizeinMb <= 25) {
+              AwsCloud.saveToS3(req.file.buffer, userdata._id.toString(), req.file.mimetype, 'brochure').then((result) => {
+                var obj = {
+                  s3_url: process.env.AWS_BUCKET_URI,
+                  Key: result.data.Key
+                };
+                return responseManager.onSuccess('file added successfully...', obj, res);
+              }).catch((err) => {
+                return responseManager.onError(err, res);
+              });
+            } else {
+              return responseManager.badrequest({ message: 'Images files must be less than 25 mb to upload brochure, please try again' }, res);
+            }
+          } else {
+            return responseManager.badrequest({ message: 'Invalid image file formate for business brochure, please try again' }, res);
+          }
+        } else {
+          return responseManager.badrequest({ message: 'Invalid image file please upload valid file, and try again' }, res);
+        }
+      }
+    } else {
+      return responseManager.badrequest({ message: 'Invalid user to upload business brochure, please try again' }, res);
+    }
+  } else {
+    return responseManager.badrequest({ message: 'Invalid user to upload business brochure, please try again' }, res);
   }
 });
 module.exports = router;
