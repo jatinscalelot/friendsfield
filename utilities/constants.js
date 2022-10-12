@@ -4,7 +4,8 @@ let constants = {
         users: 'users',
         business: 'business',
         products: 'product',
-        notifications: 'notifications'
+        notifications: 'notifications',
+        friendrequests: 'friendrequests'
     }
 };
 module.exports = constants;

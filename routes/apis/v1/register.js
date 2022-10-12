@@ -4,6 +4,7 @@ const mongoConnection = require('../../../utilities/connections');
 const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const responseManager = require('../../../utilities/response.manager');
 const usersModel = require('../../../models/users.model');
+const businessModel = require('../../../models/business.model');
 const helper = require('../../../utilities/helper');
 const constants = require('../../../utilities/constants');
 const timecalculation = require('../../../utilities/timecalculations');
@@ -51,7 +52,10 @@ router.post('/verifyotp', helper.authenticateToken, async (req, res) => {
             if(timecalculation.timedifferenceinminutes(Date.now(), userdata.otp_timestamp) <= 2){
                 if(req.body.otp.toString() == userdata.last_sent_otp){
                     let accessToken = await helper.generateAccessToken({ userid : userdata._id.toString() });
-                    return responseManager.onSuccess('Otp verified successfully!', {token : accessToken}, res);
+                    let businessprofile = await primary.model(constants.MODELS.business, businessModel).findOne({userid : mongoose.Types.ObjectId(req.token.userid)}).lean();
+                    delete userdata.last_sent_otp;
+                    delete userdata.otp_timestamp;
+                    return responseManager.onSuccess('Otp verified successfully!', {token : accessToken, userprofile : userdata, businessprofile : businessprofile}, res);
                 }else{
                     return responseManager.badrequest({message : 'Invalid token to verify user OTP, please try again'}, res);
                 }
