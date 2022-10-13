@@ -40,7 +40,6 @@ router.post('/findfriends', helper.authenticateToken, async (req, res) => {
                     ],
                     ...query
                 }).lean().then((result) => {
-                    console.log('result', result);
                     return responseManager.onSuccess("users List", result, res);
                 }).catch((error) => {
                     return responseManager.onError(error, res);
