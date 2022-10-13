@@ -1,6 +1,10 @@
 let mongoose = require("mongoose");
 let mongoosePaginate = require("mongoose-paginate-v2");
 let schema = new mongoose.Schema({
+	businessimage : {
+		type: String,
+		default: ''
+	},
 	name: {
 		type: String,
 		require: true
@@ -38,6 +42,10 @@ let schema = new mongoose.Schema({
 	userid: {
 		type: mongoose.Types.ObjectId,
 		require: true
+	},
+	brochure : {
+		type: String,
+		default: ''
 	},
 	createdBy: {
 		type: mongoose.Types.ObjectId,

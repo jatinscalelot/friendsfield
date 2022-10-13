@@ -1,6 +1,10 @@
 let mongoose = require("mongoose");
 let mongoosePaginate = require("mongoose-paginate-v2");
 let schema = new mongoose.Schema({
+	profileimage : {
+		type: String,
+		default: ''
+	},
 	conatct_no: {
 		type: String,
 		require: true

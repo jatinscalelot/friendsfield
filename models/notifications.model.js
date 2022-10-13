@@ -13,10 +13,6 @@ let schema = new mongoose.Schema({
 		type: String,
 		default: ''
 	},
-	category: {
-		type: String,
-		default: ''
-	},
 	imageUrl: {
 		type: String,
 		default: ''
