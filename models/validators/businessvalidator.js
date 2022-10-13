@@ -1,7 +1,7 @@
 var Joi = require('joi');
 const create_business = Joi.object().keys({
 	name: Joi.string().trim(),
-	category: Joi.number(),
+	category: Joi.string().trim(),
 	subCategory: Joi.string().trim(),
 	description: Joi.string().trim(),
 	longitude: Joi.number(),
