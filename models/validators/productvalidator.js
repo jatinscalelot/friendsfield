@@ -1,7 +1,7 @@
 var Joi = require('joi');
 const create_product = Joi.object().keys({
 	name: Joi.string().trim().max(30).required(),
-	price: Joi.number().trim().required(),
+	price: Joi.number().required(),
 	description: Joi.string().trim().required(),
 	category: Joi.string().trim().required(),
 	subCategory: Joi.string().trim().required(),
@@ -10,7 +10,7 @@ const create_product = Joi.object().keys({
 });
 const update_product = Joi.object().keys({
 	name: Joi.string().trim(),
-	price: Joi.number().trim(),
+	price: Joi.number(),
 	description: Joi.string().trim(),
 	category: Joi.string().trim(),
 	subCategory: Joi.string().trim(),
