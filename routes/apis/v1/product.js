@@ -4,6 +4,7 @@ const mongoConnection = require('../../../utilities/connections');
 const responseManager = require('../../../utilities/response.manager');
 const productModel = require('../../../models/products.model');
 const businessModel = require('../../../models/business.model');
+const usersModel = require('../../../models/users.model');
 const helper = require('../../../utilities/helper');
 const constants = require('../../../utilities/constants');
 const multerFn = require('../../../utilities/multer.functions');
