@@ -4,7 +4,7 @@ const create_profile = Joi.object().keys({
 	userName: Joi.string().trim(),
 	nickName: Joi.string().trim(),
 	emailId: Joi.string().trim().email(),
-	dob: Joi.date().trim(),
+	dob: Joi.date(),
 	longitude: Joi.number().trim(),
 	latitude: Joi.number().trim(),
 	gender: Joi.string().trim(),
