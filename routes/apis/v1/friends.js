@@ -63,7 +63,7 @@ router.post('/findfriends', helper.authenticateToken, async (req, res) => {
                     });
                 }
             }
-        }else{
+        }else{ 
             return responseManager.badrequest({ message: 'Invalid token to find friends list, please try again' }, res);
         }
     } else {
