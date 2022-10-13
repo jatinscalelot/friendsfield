@@ -9,39 +9,50 @@ const constants = require('../../../utilities/constants');
 const multerFn = require('../../../utilities/multer.functions');
 const AwsCloud = require('../../../utilities/aws');
 const allowedContentTypes = require("../../../utilities/content-types");
+const joiValidator = require('../../../models/validators/businessvalidator');
 let mongoose = require('mongoose');
 router.post('/setbusiness', helper.authenticateToken, async (req, res) => {
-  if(req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)){
-    let businessupdateData = req.body;
-    let primary = mongoConnection.useDb(constants.DEFAULT_DB);
-    let businessdata = await primary.model(constants.MODELS.business, businessModel).findOne({userid : mongoose.Types.ObjectId(req.token.userid)}).lean();
-    if(businessdata){
-      if(businessupdateData.latitude && businessupdateData.longitude){
-        businessupdateData.location = { type: "Point", coordinates: [ businessupdateData.longitude, businessupdateData.latitude ] };
-        delete businessupdateData.latitude;
-        delete businessupdateData.longitude;
-        await primary.model(constants.MODELS.business, businessModel).findByIdAndUpdate(businessdata._id, businessupdateData).lean();
-        return responseManager.onSuccess('Business Profile updated successfully!', 1, res);
+  let businessupdateData = req.body;
+  joiValidator.create_business.validateAsync(businessupdateData).then( async (validatedBusinessProfile) => {
+    if(req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)){  
+      let primary = mongoConnection.useDb(constants.DEFAULT_DB);
+      let businessdata = await primary.model(constants.MODELS.business, businessModel).findOne({userid : mongoose.Types.ObjectId(req.token.userid)}).lean();
+      if(businessdata){
+        if(businessupdateData.latitude && businessupdateData.longitude){
+          businessupdateData.location = { type: "Point", coordinates: [ businessupdateData.longitude, businessupdateData.latitude ] };
+          delete businessupdateData.latitude;
+          delete businessupdateData.longitude;
+          businessupdateData.updatedBy = mongoose.Types.ObjectId(req.token.userid);
+          await primary.model(constants.MODELS.business, businessModel).findByIdAndUpdate(businessdata._id, businessupdateData).lean();
+          return responseManager.onSuccess('Business Profile updated successfully!', 1, res);
+        }else{
+          businessupdateData.updatedBy = mongoose.Types.ObjectId(req.token.userid);
+          await primary.model(constants.MODELS.business, businessModel).findByIdAndUpdate(businessdata._id, businessupdateData).lean();
+          return responseManager.onSuccess('Business Profile updated successfully!', 1, res);
+        }
       }else{
-        await primary.model(constants.MODELS.business, businessModel).findByIdAndUpdate(businessdata._id, businessupdateData).lean();
-        return responseManager.onSuccess('Business Profile updated successfully!', 1, res);
+        businessupdateData.userid = mongoose.Types.ObjectId(req.token.userid);
+        if(businessupdateData.latitude && businessupdateData.longitude){
+          businessupdateData.location = { type: "Point", coordinates: [ businessupdateData.longitude, businessupdateData.latitude ] };
+          delete businessupdateData.latitude;
+          delete businessupdateData.longitude;
+          businessupdateData.createdBy = mongoose.Types.ObjectId(req.token.userid);
+          businessupdateData.updatedBy = mongoose.Types.ObjectId(req.token.userid);
+          await primary.model(constants.MODELS.business, businessModel).create(businessupdateData);
+          return responseManager.onSuccess('Business Profile updated successfully!', 1, res);
+        }else{
+          businessupdateData.createdBy = mongoose.Types.ObjectId(req.token.userid);
+          businessupdateData.updatedBy = mongoose.Types.ObjectId(req.token.userid);
+          await primary.model(constants.MODELS.business, businessModel).create(businessupdateData);
+          return responseManager.onSuccess('Business Profile updated successfully!', 1, res);
+        }
       }
     }else{
-      businessupdateData.userid = mongoose.Types.ObjectId(req.token.userid);
-      if(businessupdateData.latitude && businessupdateData.longitude){
-        businessupdateData.location = { type: "Point", coordinates: [ businessupdateData.longitude, businessupdateData.latitude ] };
-        delete businessupdateData.latitude;
-        delete businessupdateData.longitude;
-        await primary.model(constants.MODELS.business, businessModel).create(businessupdateData);
-        return responseManager.onSuccess('Business Profile updated successfully!', 1, res);
-      }else{
-        await primary.model(constants.MODELS.business, businessModel).create(businessupdateData);
-        return responseManager.onSuccess('Business Profile updated successfully!', 1, res);
-      }
+      return responseManager.badrequest({message : 'Invalid token to update user business profile, please try again'}, res);
     }
-  }else{
-    return responseManager.badrequest({message : 'Invalid token to update user business profile, please try again'}, res);
-  }
+  }).catch((validateError) => {
+    return responseManager.joiBadRequest(validateError, res);
+  });
 });
 router.get('/getbusiness', helper.authenticateToken, async (req, res) => {
   if(req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)){

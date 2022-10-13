@@ -23,7 +23,7 @@ let schema = new mongoose.Schema({
 	},
 	dob: {
 		type: String,
-		default: null
+		default: ''
 	},
 	location: {
 		type: {
@@ -59,15 +59,7 @@ let schema = new mongoose.Schema({
 		default: null
 	},
 	hobbies: [],
-	socialMediaLinks: [],
-	createdBy: {
-		type: mongoose.Types.ObjectId,
-		default: null
-	},
-	updatedBy: {
-		type: mongoose.Types.ObjectId,
-		default: null
-	}
+	socialMediaLinks: []
 }, { timestamps: true, strict: false, autoIndex: true });
 schema.plugin(mongoosePaginate);
 schema.index({ location: '2dsphere' });

@@ -40,3 +40,11 @@ exports.badrequest = (error, res) => {
 		IsSuccess: false
 	});
 }
+exports.joiBadRequest = (err, res) => {
+	res.status(400).json({
+		Message: err.message,
+		Data: 0,
+		Status: 400,
+		IsSuccess: false
+	});
+}

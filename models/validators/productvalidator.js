@@ -8,4 +8,13 @@ const create_product = Joi.object().keys({
 	offer: Joi.string().allow(null, ""),
 	itemCode: Joi.string().trim().required()
 });
-module.exports = { create_product }
+const update_product = Joi.object().keys({
+	name: Joi.string().trim(),
+	price: Joi.number().trim(),
+	description: Joi.string().trim(),
+	category: Joi.string().trim(),
+	subCategory: Joi.string().trim(),
+	offer: Joi.string().allow(null, ""),
+	itemCode: Joi.string().trim()
+});
+module.exports = { create_product, update_product }

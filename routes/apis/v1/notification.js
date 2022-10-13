@@ -6,40 +6,52 @@ const notificationModel = require('../../../models/notifications.model');
 const businessModel = require('../../../models/business.model');
 const helper = require('../../../utilities/helper');
 const constants = require('../../../utilities/constants');
+const joiValidator = require('../../../models/validators/notificationvalidator');
 let mongoose = require('mongoose');
 router.post('/create', helper.authenticateToken, async (req, res) => {
-    if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
-        let notificationData = req.body;
-        let primary = mongoConnection.useDb(constants.DEFAULT_DB);
-        let businessdata = await primary.model(constants.MODELS.business, businessModel).findOne({ userid: mongoose.Types.ObjectId(req.token.userid) }).lean();
-        if (businessdata) {
-            notificationData.userid = mongoose.Types.ObjectId(req.token.userid);
-            notificationData.businessid = mongoose.Types.ObjectId(businessdata._id);
-            await primary.model(constants.MODELS.notifications, notificationModel).create(notificationData);
-            return responseManager.onSuccess('Notification created successfully!', 1, res);
+    let notificationData = req.body;
+    joiValidator.create_notification.validateAsync(notificationData).then( async (validatedNotification) => {
+        if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {        
+            let primary = mongoConnection.useDb(constants.DEFAULT_DB);
+            let businessdata = await primary.model(constants.MODELS.business, businessModel).findOne({ userid: mongoose.Types.ObjectId(req.token.userid) }).lean();
+            if (businessdata) {
+                notificationData.userid = mongoose.Types.ObjectId(req.token.userid);
+                notificationData.businessid = mongoose.Types.ObjectId(businessdata._id);
+                notificationData.createdBy = mongoose.Types.ObjectId(req.token.userid);
+                notificationData.updatedBy = mongoose.Types.ObjectId(req.token.userid);
+                await primary.model(constants.MODELS.notifications, notificationModel).create(notificationData);
+                return responseManager.onSuccess('Notification created successfully!', 1, res);
+            } else {
+                return responseManager.unauthorisedRequest(res);
+            }
         } else {
-            return responseManager.unauthorisedRequest(res);
+            return responseManager.badrequest({ message: 'Invalid token to create notification, please try again' }, res);
         }
-    } else {
-        return responseManager.badrequest({ message: 'Invalid token to create notification, please try again' }, res);
-    }
+    }).catch((validateError) => {
+        return responseManager.joiBadRequest(validateError, res);
+    });
 });
 router.post('/edit', helper.authenticateToken, async (req, res) => {
-    if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
-        let notificationData = req.body;
-        let primary = mongoConnection.useDb(constants.DEFAULT_DB);
-        let businessdata = await primary.model(constants.MODELS.business, businessModel).findOne({ userid: mongoose.Types.ObjectId(req.token.userid) }).lean();
-        if (businessdata) {
-            let nid = notificationData.notificationid;
-            delete notificationData.notificationid;
-            await primary.model(constants.MODELS.notifications, notificationModel).findByIdAndUpdate(nid, notificationData).lean();
-            return responseManager.onSuccess('Notification updated successfully!', 1, res);
+    let notificationData = req.body;
+    joiValidator.update_notification.validateAsync(notificationData).then( async (validatedNotificationUpdate) => {
+        if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
+            let primary = mongoConnection.useDb(constants.DEFAULT_DB);
+            let businessdata = await primary.model(constants.MODELS.business, businessModel).findOne({ userid: mongoose.Types.ObjectId(req.token.userid) }).lean();
+            if (businessdata) {
+                let nid = notificationData.notificationid;
+                delete notificationData.notificationid;
+                notificationData.updatedBy = mongoose.Types.ObjectId(req.token.userid);
+                await primary.model(constants.MODELS.notifications, notificationModel).findByIdAndUpdate(nid, notificationData).lean();
+                return responseManager.onSuccess('Notification updated successfully!', 1, res);
+            } else {
+                return responseManager.unauthorisedRequest(res);
+            }
         } else {
-            return responseManager.unauthorisedRequest(res);
+            return responseManager.badrequest({ message: 'Invalid token to update notification, please try again' }, res);
         }
-    } else {
-        return responseManager.badrequest({ message: 'Invalid token to update notification, please try again' }, res);
-    }
+    }).catch((validateError) => {
+        return responseManager.joiBadRequest(validateError, res);
+    });
 });
 router.post('/list', helper.authenticateToken, async (req, res) => {
     if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {

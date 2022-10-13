@@ -9,42 +9,54 @@ const constants = require('../../../utilities/constants');
 const multerFn = require('../../../utilities/multer.functions');
 const AwsCloud = require('../../../utilities/aws');
 const allowedContentTypes = require("../../../utilities/content-types");
+const joiValidator = require('../../../models/validators/productvalidator');
 let mongoose = require('mongoose');
 router.post('/create', helper.authenticateToken, async (req, res) => {
-    if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
-        let productData = req.body;
-        let primary = mongoConnection.useDb(constants.DEFAULT_DB);
-        let businessdata = await primary.model(constants.MODELS.business, businessModel).findOne({ userid: mongoose.Types.ObjectId(req.token.userid) }).lean();
-        if (businessdata) {
-            productData.price = parseFloat(productData.price);
-            productData.userid = mongoose.Types.ObjectId(req.token.userid);
-            productData.businessid = mongoose.Types.ObjectId(businessdata._id);
-            await primary.model(constants.MODELS.products, productModel).create(productData);
-            return responseManager.onSuccess('Product created successfully!', 1, res);
+    let productData = req.body;
+    joiValidator.create_product.validateAsync(productData).then( async (validatedProductcreate) => {
+        if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
+            let primary = mongoConnection.useDb(constants.DEFAULT_DB);
+            let businessdata = await primary.model(constants.MODELS.business, businessModel).findOne({ userid: mongoose.Types.ObjectId(req.token.userid) }).lean();
+            if (businessdata) {
+                productData.price = parseFloat(productData.price);
+                productData.userid = mongoose.Types.ObjectId(req.token.userid);
+                productData.businessid = mongoose.Types.ObjectId(businessdata._id);
+                productData.createdBy = mongoose.Types.ObjectId(req.token.userid);
+                productData.updatedBy = mongoose.Types.ObjectId(req.token.userid);
+                await primary.model(constants.MODELS.products, productModel).create(productData);
+                return responseManager.onSuccess('Product created successfully!', 1, res);
+            } else {
+                return responseManager.unauthorisedRequest(res);
+            }
         } else {
-            return responseManager.unauthorisedRequest(res);
+            return responseManager.badrequest({ message: 'Invalid token to create product, please try again' }, res);
         }
-    } else {
-        return responseManager.badrequest({ message: 'Invalid token to create product, please try again' }, res);
-    }
+    }).catch((validateError) => {
+        return responseManager.joiBadRequest(validateError, res);
+    });
 });
 router.post('/edit', helper.authenticateToken, async (req, res) => {
-    if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
-        let productData = req.body;
-        let primary = mongoConnection.useDb(constants.DEFAULT_DB);
-        let businessdata = await primary.model(constants.MODELS.business, businessModel).findOne({ userid: mongoose.Types.ObjectId(req.token.userid) }).lean();
-        if (businessdata) {
-            productData.price = parseFloat(productData.price);
-            let pid = productData.productid;
-            delete productData.productid;
-            await primary.model(constants.MODELS.products, productModel).findByIdAndUpdate(pid, productData).lean();
-            return responseManager.onSuccess('Product updated successfully!', 1, res);
+    let productData = req.body;
+    joiValidator.update_product.validateAsync(productData).then( async (validatedProductupdate) => {
+        if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
+            let primary = mongoConnection.useDb(constants.DEFAULT_DB);
+            let businessdata = await primary.model(constants.MODELS.business, businessModel).findOne({ userid: mongoose.Types.ObjectId(req.token.userid) }).lean();
+            if (businessdata) {
+                productData.price = parseFloat(productData.price);
+                let pid = productData.productid;
+                delete productData.productid;
+                productData.updatedBy = mongoose.Types.ObjectId(req.token.userid);
+                await primary.model(constants.MODELS.products, productModel).findByIdAndUpdate(pid, productData).lean();
+                return responseManager.onSuccess('Product updated successfully!', 1, res);
+            } else {
+                return responseManager.unauthorisedRequest(res);
+            }
         } else {
-            return responseManager.unauthorisedRequest(res);
+            return responseManager.badrequest({ message: 'Invalid token to edit product, please try again' }, res);
         }
-    } else {
-        return responseManager.badrequest({ message: 'Invalid token to edit product, please try again' }, res);
-    }
+    }).catch((validateError) => {
+        return responseManager.joiBadRequest(validateError, res);
+    });
 });
 router.post('/list', helper.authenticateToken, async (req, res) => {
     if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {

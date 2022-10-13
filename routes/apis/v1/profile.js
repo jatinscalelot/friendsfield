@@ -8,29 +8,34 @@ const constants = require('../../../utilities/constants');
 const multerFn = require('../../../utilities/multer.functions');
 const AwsCloud = require('../../../utilities/aws');
 const allowedContentTypes = require("../../../utilities/content-types");
+const joiValidator = require("../../../models/validators/profilevalidator");
 let mongoose = require('mongoose');
 router.post('/setprofile', helper.authenticateToken, async (req, res) => {
-  if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
-    let primary = mongoConnection.useDb(constants.DEFAULT_DB);
-    let userdata = await primary.model(constants.MODELS.users, usersModel).findById(req.token.userid).lean();
-    if (userdata) {
-      let userupdateData = req.body;
-      if (userupdateData.latitude && userupdateData.longitude) {
-        userupdateData.location = { type: "Point", coordinates: [userupdateData.longitude, userupdateData.latitude] };
-        delete userupdateData.latitude;
-        delete userupdateData.longitude;
-        await primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(req.token.userid, userupdateData).lean();
-        return responseManager.onSuccess('Profile updated successfully!', 1, res);
+  let userupdateData = req.body;
+  joiValidator.create_profile.validateAsync(userupdateData).then( async (validatedProfile) => {
+    if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
+      let primary = mongoConnection.useDb(constants.DEFAULT_DB);
+      let userdata = await primary.model(constants.MODELS.users, usersModel).findById(req.token.userid).lean();
+      if (userdata) {
+        if (userupdateData.latitude && userupdateData.longitude) {
+          userupdateData.location = { type: "Point", coordinates: [userupdateData.longitude, userupdateData.latitude] };
+          delete userupdateData.latitude;
+          delete userupdateData.longitude;
+          await primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(req.token.userid, userupdateData).lean();
+          return responseManager.onSuccess('Profile updated successfully!', 1, res);
+        } else {
+          await primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(req.token.userid, userupdateData).lean();
+          return responseManager.onSuccess('Profile updated successfully!', 1, res);
+        }
       } else {
-        await primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(req.token.userid, userupdateData).lean();
-        return responseManager.onSuccess('Profile updated successfully!', 1, res);
+        return responseManager.badrequest({ message: 'Invalid token to update user profile, please try again' }, res);
       }
     } else {
       return responseManager.badrequest({ message: 'Invalid token to update user profile, please try again' }, res);
     }
-  } else {
-    return responseManager.badrequest({ message: 'Invalid token to update user profile, please try again' }, res);
-  }
+  }).catch((validateError) => {
+    return responseManager.joiBadRequest(validateError, res);
+  });
 });
 router.get('/getprofile', helper.authenticateToken, async (req, res) => {
   if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {

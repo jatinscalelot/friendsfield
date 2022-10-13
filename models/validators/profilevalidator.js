@@ -1,19 +1,19 @@
 var Joi = require('joi');
 const create_profile = Joi.object().keys({
-	fullName: Joi.string().trim().required(),
-	userName: Joi.string().trim().required(),
-	nickName: Joi.string().trim().required(),
-	emailId: Joi.string().trim().email().required(),
-	dob: Joi.date().trim().required(),
-	longitude: Joi.number().trim().required(),
-	latitude: Joi.number().trim().required(),
-	gender: Joi.string().trim().required(),
-	interestedin: Joi.string().trim().required(),
-	areaRange: Joi.number().trim().required(),
+	fullName: Joi.string().trim(),
+	userName: Joi.string().trim(),
+	nickName: Joi.string().trim(),
+	emailId: Joi.string().trim().email(),
+	dob: Joi.date().trim(),
+	longitude: Joi.number().trim(),
+	latitude: Joi.number().trim(),
+	gender: Joi.string().trim(),
+	interestedin: Joi.string().trim(),
+	areaRange: Joi.number().trim(),
 	aboutUs: Joi.string().trim(),
-	targetAudienceAgeMin: Joi.number().trim().required(),
-	targetAudienceAgeMax: Joi.number().trim().required(),
-	hobbies: Joi.array().trim(),
-	socialMediaLinks: Joi.array().trim()
+	targetAudienceAgeMin: Joi.number().trim(),
+	targetAudienceAgeMax: Joi.number().trim(),
+	hobbies: Joi.array(),
+	socialMediaLinks: Joi.array()
 });
 module.exports = { create_profile }

@@ -7,7 +7,6 @@ let schema = new mongoose.Schema({
 	},
 	price: {
 		type: Number,
-		default: '',
 		require: true
 	},
 	description: {

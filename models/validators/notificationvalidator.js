@@ -6,4 +6,11 @@ const create_notification = Joi.object().keys({
 	category: Joi.string().trim().required(),
 	imageUrl: Joi.string().trim().required(),
 });
-module.exports = { create_notification }
+const update_notification = Joi.object().keys({
+	title: Joi.string().trim(),
+	description: Joi.string().trim(),
+	link: Joi.string().trim(),
+	category: Joi.string().trim(),
+	imageUrl: Joi.string().trim(),
+});
+module.exports = { create_notification, update_notification }

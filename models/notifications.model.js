@@ -7,7 +7,7 @@ let schema = new mongoose.Schema({
 	},
 	description: {
 		type: String,
-		default: null
+		default: ''
 	},
 	link: {
 		type: String,

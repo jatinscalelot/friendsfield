@@ -15,7 +15,7 @@ let schema = new mongoose.Schema({
 	},
 	status: {
 		type: String,
-		default: ''
+		default: 'sent'
 	},
 	createdBy: {
 		type: mongoose.Types.ObjectId,
