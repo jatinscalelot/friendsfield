@@ -31,7 +31,7 @@ router.post('/sendotp', async (req, res) => {
         body: otp.toString() + " is the OTP for FreindsField Registration, This otp valid for 2 minutes"
       }).then(async (response) => {
         let primary = mongoConnection.useDb(constants.DEFAULT_DB);
-        let userdata = await primary.model(constants.MODELS.users, usersModel).findOne({ conatct_no: mobileno }).lean();
+        let userdata = await primary.model(constants.MODELS.users, usersModel).findOne({ conatact_no: mobileno }).lean();
         if (userdata != null) {
           let obj = {
             last_sent_otp: otp.toString(),
@@ -40,13 +40,13 @@ router.post('/sendotp', async (req, res) => {
           await primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(userdata._id, obj);
         } else {
           let obj = {
-            conatct_no: mobileno,
+            conatact_no: mobileno,
             last_sent_otp: otp.toString(),
             otp_timestamp: Date.now()
           };
           await primary.model(constants.MODELS.users, usersModel).create(obj);
         }
-        let accessToken = await helper.generateAccessToken({ conatct_no: mobileno });
+        let accessToken = await helper.generateAccessToken({ conatact_no: mobileno });
         return responseManager.onSuccess('Otp sent successfully!', { token: accessToken }, res);
       }).catch((error) => {
         return responseManager.onError(error, res);
