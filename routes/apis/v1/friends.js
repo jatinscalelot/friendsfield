@@ -10,7 +10,7 @@ let mongoose = require('mongoose');
 let myfriendlistCtrl = require('../../../controllers/friends/myfriends');
 let receivedfriendRequestCtrl = require('../../../controllers/friends/receivedfriendrequests');
 let sentfriendRequestCtrl = require('../../../controllers/friends/sentfriendrequests');
-let blockedRequestCtrl = require('../../../controllers/friends/');
+let blockedRequestCtrl = require('../../../controllers/friends/blockedrequest');
 router.post('/myfriends', helper.authenticateToken, myfriendlistCtrl.myfriends);
 router.post('/receivedfriendrequests', helper.authenticateToken, receivedfriendRequestCtrl.receivedfriendrequests);
 router.post('/sentfriendrequests', helper.authenticateToken, sentfriendRequestCtrl.sentfriendrequests);
