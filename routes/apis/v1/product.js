@@ -46,9 +46,13 @@ router.post('/edit', helper.authenticateToken, async (req, res) => {
                 productData.price = parseFloat(productData.price);
                 let pid = productData.productid;
                 delete productData.productid;
-                productData.updatedBy = mongoose.Types.ObjectId(req.token.userid);
-                await primary.model(constants.MODELS.products, productModel).findByIdAndUpdate(pid, productData).lean();
-                return responseManager.onSuccess('Product updated successfully!', 1, res);
+                if(mongoose.Types.ObjectId.isValid(pid)){
+                    productData.updatedBy = mongoose.Types.ObjectId(req.token.userid);
+                    await primary.model(constants.MODELS.products, productModel).findByIdAndUpdate(pid, productData).lean();
+                    return responseManager.onSuccess('Product updated successfully!', 1, res);
+                }else{
+                    return responseManager.badrequest({ message: 'Invalid product id to edit product, please try again' }, res);
+                }
             } else {
                 return responseManager.unauthorisedRequest(res);
             }
