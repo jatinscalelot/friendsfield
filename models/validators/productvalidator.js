@@ -10,6 +10,7 @@ const create_product = Joi.object().keys({
 	images: Joi.array()
 });
 const update_product = Joi.object().keys({
+	productid :  Joi.string().trim(),
 	name: Joi.string().trim(),
 	price: Joi.number(),
 	description: Joi.string().trim(),
