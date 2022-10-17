@@ -43,7 +43,7 @@ router.post('/findfriends', helper.authenticateToken, async (req, res) => {
                     $or: [
                         { fullName: { '$regex': new RegExp(search, "i") } },
                         { nickName: { '$regex': new RegExp(search, "i") } },
-                        { conatact_no: { '$regex': new RegExp(search, "i") } },
+                        { contact_no: { '$regex': new RegExp(search, "i") } },
                         { userName: { '$regex': new RegExp(search, "i") } },
                     ],
                     ...query
@@ -59,7 +59,7 @@ router.post('/findfriends', helper.authenticateToken, async (req, res) => {
                         $or: [
                             { fullName: { '$regex': new RegExp(search, "i") } },
                             { nickName: { '$regex': new RegExp(search, "i") } },
-                            { conatact_no: { '$regex': new RegExp(search, "i") } },
+                            { contact_no: { '$regex': new RegExp(search, "i") } },
                             { userName: { '$regex': new RegExp(search, "i") } },
                         ]
                     }).lean().then((result) => {

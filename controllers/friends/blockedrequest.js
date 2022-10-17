@@ -31,7 +31,7 @@ exports.blockedrequest = async (req, res) => {
                     if(friendrequest.senderid._id.toString() == req.token.userid.toString()){
                         let obj = {
                             _id : friendrequest.receiverid._id,
-                            conatact_no : friendrequest.receiverid.conatact_no,
+                            contact_no : friendrequest.receiverid.contact_no,
                             aboutUs : friendrequest.receiverid.aboutUs,
                             areaRange : friendrequest.receiverid.areaRange,
                             emailId : friendrequest.receiverid.emailId,
@@ -50,7 +50,7 @@ exports.blockedrequest = async (req, res) => {
                     }else{
                         let obj = {
                             _id : friendrequest.senderid._id,
-                            conatact_no : friendrequest.senderid.conatact_no,
+                            contact_no : friendrequest.senderid.contact_no,
                             aboutUs : friendrequest.senderid.aboutUs,
                             areaRange : friendrequest.senderid.areaRange,
                             emailId : friendrequest.senderid.emailId,

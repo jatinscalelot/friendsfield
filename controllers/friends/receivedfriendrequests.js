@@ -29,7 +29,7 @@ exports.receivedfriendrequests = async (req, res) => {
                 async.forEachSeries(receivedfriendrequests.docs, (friendrequest, next_friendrequest) => {
                     let obj = {
                         _id : friendrequest.senderid._id,
-                        conatact_no : friendrequest.senderid.conatact_no,
+                        contact_no : friendrequest.senderid.contact_no,
                         aboutUs : friendrequest.senderid.aboutUs,
                         areaRange : friendrequest.senderid.areaRange,
                         emailId : friendrequest.senderid.emailId,

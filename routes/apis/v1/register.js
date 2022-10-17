@@ -20,7 +20,7 @@ router.post('/sendotp', async (req, res) => {
             body: otp.toString()+" is the OTP for FreindsField Registration, This otp valid for 2 minutes"
         }).then(async (response) => {
             let primary = mongoConnection.useDb(constants.DEFAULT_DB);
-            let userdata = await primary.model(constants.MODELS.users, usersModel).findOne({ conatact_no: mobileno }).lean();
+            let userdata = await primary.model(constants.MODELS.users, usersModel).findOne({ contact_no: mobileno }).lean();
             if(userdata != null){
                 let obj = {
                     last_sent_otp : otp.toString(),
@@ -29,13 +29,13 @@ router.post('/sendotp', async (req, res) => {
                 await primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(userdata._id, obj);
             }else{
                 let obj = {
-                    conatact_no : mobileno,
+                    contact_no : mobileno,
                     last_sent_otp : otp.toString(),
                     otp_timestamp : Date.now()
                 };
                 await primary.model(constants.MODELS.users, usersModel).create(obj);
             }
-            let accessToken = await helper.generateAccessToken({ conatact_no : mobileno });
+            let accessToken = await helper.generateAccessToken({ contact_no : mobileno });
             return responseManager.onSuccess('Otp sent successfully!', {token : accessToken}, res);
         }).catch((error) => {
             return responseManager.onError(error, res);
@@ -45,9 +45,9 @@ router.post('/sendotp', async (req, res) => {
     }
 });
 router.post('/verifyotp', helper.authenticateToken, async (req, res) => {
-    if(req.token.conatact_no && req.body.otp && req.body.otp != '' && req.body.otp != null && req.body.otp.length == 4){
+    if(req.token.contact_no && req.body.otp && req.body.otp != '' && req.body.otp != null && req.body.otp.length == 4){
         let primary = mongoConnection.useDb(constants.DEFAULT_DB);
-        let userdata = await primary.model(constants.MODELS.users, usersModel).findOne({ conatact_no: req.token.conatact_no }).lean();
+        let userdata = await primary.model(constants.MODELS.users, usersModel).findOne({ contact_no: req.token.contact_no }).lean();
         if(userdata) {
             if(timecalculation.timedifferenceinminutes(Date.now(), userdata.otp_timestamp) <= 2){
                 if(req.body.otp.toString() == userdata.last_sent_otp){
@@ -76,9 +76,9 @@ router.post('/changenumber', helper.authenticateToken, async (req, res) => {
                 let primary = mongoConnection.useDb(constants.DEFAULT_DB);
                 let userdata = await primary.model(constants.MODELS.users, usersModel).findById(req.token.userid).lean();
                 if(userdata){
-                    if(userdata.conatact_no == oldcountryCode+oldcontactNo){
+                    if(userdata.contact_no == oldcountryCode+oldcontactNo){
                         if(newcountryCode+newcontactNo != oldcountryCode+oldcontactNo){
-                            let existingUser = await primary.model(constants.MODELS.users, usersModel).findOne({conatact_no : newcountryCode+newcontactNo}).lean();
+                            let existingUser = await primary.model(constants.MODELS.users, usersModel).findOne({contact_no : newcountryCode+newcontactNo}).lean();
                             if(existingUser == null){
                                 let mobileno = newcountryCode+newcontactNo;
                                 let otp = Math.floor(1000 + Math.random() * 9000);
@@ -127,7 +127,7 @@ router.post('/verifyotpfornewnumber', helper.authenticateToken, async (req, res)
             if(timecalculation.timedifferenceinminutes(Date.now(), userdata.otp_timestamp) <= 2){
                 if(req.body.otp.toString() == userdata.last_sent_otp){
                     let obj = {
-                        conatact_no : userdata.new_contact_number
+                        contact_no : userdata.new_contact_number
                     };
                     await primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(req.token.userid, obj).lean();
                     await primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(req.token.userid, { $unset : { new_contact_number : 1} }).lean();

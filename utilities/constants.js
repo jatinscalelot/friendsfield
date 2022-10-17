@@ -5,7 +5,8 @@ let constants = {
         business: 'business',
         products: 'product',
         notifications: 'notifications',
-        friendrequests: 'friendrequests'
+        friendrequests: 'friendrequests',
+        chats: 'chats' 
     }
 };
 module.exports = constants;

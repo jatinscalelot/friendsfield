@@ -5,7 +5,7 @@ let schema = new mongoose.Schema({
 		type: String,
 		default: ''
 	},
-	conatact_no: {
+	contact_no: {
 		type: String,
 		require: true
 	},

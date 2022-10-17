@@ -42,7 +42,7 @@ exports.myfriends = async (req, res) => {
                                 profileimage : friendrequest.receiverid.profileimage,
                             };
                             if(friendrequest.receiver_scope.fullname){obj.fullName = friendrequest.receiverid.fullName;}
-                            if(friendrequest.receiver_scope.contactnumber){obj.conatact_no = friendrequest.receiverid.conatact_no;}
+                            if(friendrequest.receiver_scope.contactnumber){obj.contact_no = friendrequest.receiverid.contact_no;}
                             if(friendrequest.receiver_scope.email){obj.emailId = friendrequest.receiverid.emailId;}
                             if(friendrequest.receiver_scope.dob){obj.dob = friendrequest.receiverid.dob;}
                             if(friendrequest.receiver_scope.gender){obj.gender = friendrequest.receiverid.gender;}
@@ -51,7 +51,7 @@ exports.myfriends = async (req, res) => {
                         }else{
                             let obj = {
                                 _id : friendrequest.receiverid._id,
-                                conatact_no : friendrequest.receiverid.conatact_no,
+                                contact_no : friendrequest.receiverid.contact_no,
                                 aboutUs : friendrequest.receiverid.aboutUs,
                                 areaRange : friendrequest.receiverid.areaRange,
                                 emailId : friendrequest.receiverid.emailId,
@@ -82,7 +82,7 @@ exports.myfriends = async (req, res) => {
                                 profileimage : friendrequest.senderid.profileimage,
                             };
                             if(friendrequest.sender_scope.fullname){obj.fullName = friendrequest.senderid.fullName;}
-                            if(friendrequest.sender_scope.contactnumber){obj.conatact_no = friendrequest.senderid.conatact_no;}
+                            if(friendrequest.sender_scope.contactnumber){obj.contact_no = friendrequest.senderid.contact_no;}
                             if(friendrequest.sender_scope.email){obj.emailId = friendrequest.senderid.emailId;}
                             if(friendrequest.sender_scope.dob){obj.dob = friendrequest.senderid.dob;}
                             if(friendrequest.sender_scope.gender){obj.gender = friendrequest.senderid.gender;}
@@ -91,7 +91,7 @@ exports.myfriends = async (req, res) => {
                         }else{
                             let obj = {
                                 _id : friendrequest.senderid._id,
-                                conatact_no : friendrequest.senderid.conatact_no,
+                                contact_no : friendrequest.senderid.contact_no,
                                 aboutUs : friendrequest.senderid.aboutUs,
                                 areaRange : friendrequest.senderid.areaRange,
                                 emailId : friendrequest.senderid.emailId,
