@@ -46,7 +46,8 @@ mongoose.connection.once('open', () => {
 app.use('/', indexRouter);
 // Web App Routers
 const webpaths = [
-  { pathUrl: '/', routeFile: 'login' },
+  { pathUrl: '/', routeFile: 'index'},
+  { pathUrl: '/login', routeFile: 'login' },
   { pathUrl: '/otp', routeFile: 'otp' },
   { pathUrl: '/profile', routeFile: 'profile' }
 ];

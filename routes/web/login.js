@@ -9,7 +9,6 @@ const usersModel = require('../../models/users.model');
 const helper = require('../../utilities/helper');
 const constants = require('../../utilities/constants');
 const timecalculation = require('../../utilities/timecalculations');
-
 router.get('/', async (req, res) => {
   if (req.session.userid && req.session.userid != null && req.session.userid != '') {
     res.render('login', { layout: false, title: "Login" });
