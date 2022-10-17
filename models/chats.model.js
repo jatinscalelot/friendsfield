@@ -16,6 +16,38 @@ let schema = new mongoose.Schema({
     contentType : {
         type: String,
 		require: true
+    },
+    content : {
+        text : {
+            message : {
+                type: String,
+                default: ''
+            }
+        },
+        media : {
+            path : {
+                type: String,
+                default: ''
+            },
+            type : {
+                type: String,
+                default: ''
+            },
+            mime : {
+                type: String,
+                default: ''
+            },
+            name : {
+                type: String,
+                default: ''
+            }
+        },
+        product : {
+            productid : {
+                type: mongoose.Types.ObjectId,
+                default: null
+            }
+        }
     }
 }, { timestamps: true, strict: false, autoIndex: true });
 schema.plugin(mongoosePaginate);
