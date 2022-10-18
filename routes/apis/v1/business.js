@@ -77,7 +77,7 @@ router.post('/setbusinessprofile', helper.authenticateToken, multerFn.memoryUplo
         if (req.file) {
           if (allowedContentTypes.imagearray.includes(req.file.mimetype)) {
             let filesizeinMb = parseFloat(parseFloat(req.file.size) / 1000000);
-            if (filesizeinMb <= 5) {
+            if (filesizeinMb <= 10) {
               AwsCloud.saveToS3(req.file.buffer, userdata._id.toString(), req.file.mimetype, 'profile').then((result) => {
                 var obj = {
                   s3_url: process.env.AWS_BUCKET_URI,
@@ -92,7 +92,7 @@ router.post('/setbusinessprofile', helper.authenticateToken, multerFn.memoryUplo
                 return responseManager.onError(err, res);
               });
             } else {
-              return responseManager.badrequest({ message: 'Images files must be less than 5 mb to upload, please try again' }, res);
+              return responseManager.badrequest({ message: 'Images files must be less than 10 mb to upload, please try again' }, res);
             }
           } else {
             return responseManager.badrequest({ message: 'Invalid image file formate for business profile, please try again' }, res);
