@@ -88,4 +88,5 @@ router.post('/send', helper.authenticateToken, multerFn.memoryUpload.single("fil
         return responseManager.badrequest({ message: 'Invalid token to send message, please try again' }, res);
     }
 });
+
 module.exports = router;

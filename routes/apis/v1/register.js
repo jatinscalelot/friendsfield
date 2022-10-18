@@ -54,6 +54,7 @@ router.post('/verifyotp', helper.authenticateToken, async (req, res) => {
                     let accessToken = await helper.generateAccessToken({ userid : userdata._id.toString() });
                     delete userdata.last_sent_otp;
                     delete userdata.otp_timestamp;
+                    await primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(userdata._id, { channelID : userdata._id.toString().toUpperCase() }).lean();
                     return responseManager.onSuccess('Otp verified successfully!', {token : accessToken}, res);
                 }else{
                     return responseManager.badrequest({message : 'Invalid token to verify user OTP, please try again'}, res);

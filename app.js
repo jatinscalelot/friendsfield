@@ -33,6 +33,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/angular", express.static(__dirname + "/node_modules/angular"));
+app.use('/socket.io', express.static(__dirname + '/node_modules/socket.io/client-dist'));
 mongoose.set('runValidators', true);
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
