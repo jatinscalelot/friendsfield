@@ -89,7 +89,7 @@ app.controller("LoginController", ($scope, $http,) => {
         }).then(
             function (response) {
                 if (response.data.IsSuccess == true && response.data.Data != 0) {
-                    console.log('here');
+                    window.location.href = '/otp';
                 } else {
                     window.location.href = AUTO_LOGOUT;
                 }

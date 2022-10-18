@@ -13,12 +13,15 @@ router.post('/sendotp', async (req, res) => {
     const { contactNo, countryCode } = req.body;
     if(contactNo && contactNo != '' && contactNo != null && contactNo.length > 9 && countryCode && countryCode != '' && countryCode != null){
         let mobileno = countryCode+contactNo;
-        let otp = Math.floor(1000 + Math.random() * 9000);
-        client.messages.create({
-            from: process.env.TWILIO_MOBILE,
-            to: '+'+mobileno,
-            body: otp.toString()+" is the OTP for FreindsField Registration, This otp valid for 2 minutes"
-        }).then(async (response) => {
+        let otp = '1234';//Math.floor(1000 + Math.random() * 9000);
+        // console.log('process.env.TWILIO_ACCOUNT_SID', process.env.TWILIO_ACCOUNT_SID);
+        // console.log('client', client);
+        // client.messages.create({
+        //     messaging_service_sid: 'MGcfc060d9482ac8c1591396b038a3ab22',
+        //     from: process.env.TWILIO_MOBILE,
+        //     to: '+'+mobileno,
+        //     body: otp.toString()+" is the OTP for FreindsField Registration, This otp valid for 2 minutes"
+        // }).then(async (response) => {
             let primary = mongoConnection.useDb(constants.DEFAULT_DB);
             let userdata = await primary.model(constants.MODELS.users, usersModel).findOne({ contact_no: mobileno }).lean();
             if(userdata != null){
@@ -37,9 +40,10 @@ router.post('/sendotp', async (req, res) => {
             }
             let accessToken = await helper.generateAccessToken({ contact_no : mobileno });
             return responseManager.onSuccess('Otp sent successfully!', {token : accessToken}, res);
-        }).catch((error) => {
-            return responseManager.onError(error, res);
-        });
+        // }).catch((error) => {
+        //     console.log('error', error);
+        //     return responseManager.onError(error, res);
+        // });
     }else{
         return responseManager.badrequest({message : 'Invalid contact number please try again'}, res);
     }
