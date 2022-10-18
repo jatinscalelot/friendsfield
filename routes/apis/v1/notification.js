@@ -139,7 +139,7 @@ router.post('/setnotificationbanner', helper.authenticateToken, async (req, res)
         return responseManager.badrequest({ message: 'Invalid token to upload product image, please try again' }, res);
     }
 });
-router.delete('/remove', helper.authenticateToken, async (req, res) => {
+router.post('/remove', helper.authenticateToken, async (req, res) => {
     if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
         if (req.body.nid && mongoose.Types.ObjectId.isValid(req.body.nid)){
             let primary = mongoConnection.useDb(constants.DEFAULT_DB);
