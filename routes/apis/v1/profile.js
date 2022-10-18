@@ -58,7 +58,6 @@ router.post('/setprofilepic', helper.authenticateToken, multerFn.memoryUpload.si
       if (req.file) {
         if (allowedContentTypes.imagearray.includes(req.file.mimetype)) {
           let filesizeinMb = parseFloat(parseFloat(req.file.size) / 1000000);
-          console.log('filesizeinMb', filesizeinMb);
           if (filesizeinMb <= 5) {
             AwsCloud.saveToS3(req.file.buffer, userdata._id.toString(), req.file.mimetype, 'profile').then((result) => {
               var obj = {
