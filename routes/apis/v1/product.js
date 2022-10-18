@@ -114,7 +114,7 @@ router.get('/single', helper.authenticateToken, async (req, res) => {
         return responseManager.badrequest({ message: 'Invalid token to get product, please try again' }, res);
     }
 });
-router.delete('/remove', helper.authenticateToken, async (req, res) => {
+router.post('/remove', helper.authenticateToken, async (req, res) => {
     if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
         if (req.body.pid && mongoose.Types.ObjectId.isValid(req.body.pid)) {
             let primary = mongoConnection.useDb(constants.DEFAULT_DB);
