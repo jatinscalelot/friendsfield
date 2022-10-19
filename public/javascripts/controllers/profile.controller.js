@@ -1,6 +1,12 @@
 app.controller("ProfileController", ($scope, $http, $interval, $location) => {
     $scope.profile = {};
     $scope.goToProfile = () => {
+        window.location.href = '/profile/create';
+    };
+    $scope.goToChats = () => {
+        window.location.href = '/chats';
+    };
+    $scope.onInit = () => {
         $http({
             url: BASE_URL+'profile',
             method: "POST",
@@ -13,7 +19,7 @@ app.controller("ProfileController", ($scope, $http, $interval, $location) => {
             function (response) {
                 if (response.data.IsSuccess == true && response.data.Data != 0) {
                     $scope.profile = response.data.Data;
-                    window.location.href = '/profile/create';
+                    console.log('$scope.profile', $scope.profile);
                 } else {
                     window.location.href = AUTO_LOGOUT;
                 }
@@ -23,7 +29,5 @@ app.controller("ProfileController", ($scope, $http, $interval, $location) => {
               }
         );
     };
-    $scope.goToChats = () => {
-        window.location.href = '/chats';
-    };
+    $scope.onInit();
 });

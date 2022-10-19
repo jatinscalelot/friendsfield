@@ -6,6 +6,7 @@ const create_notification = Joi.object().keys({
 	imageUrl: Joi.string().trim().required(),
 });
 const update_notification = Joi.object().keys({
+	notificationid:  Joi.string().trim(),
 	title: Joi.string().trim(),
 	description: Joi.string().trim(),
 	link: Joi.string().trim(),
