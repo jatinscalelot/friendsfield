@@ -11,31 +11,39 @@ const constants = require('../../utilities/constants');
 const timecalculation = require('../../utilities/timecalculations');
 router.get('/', async (req, res) => {
   if (req.session.userid && req.session.userid != null && req.session.userid != '') {
-    // go to home page
+    var goto = process.env.APPURI + '/home';
+    res.writeHead(302, { 'Location': goto });
+    res.end();
   } else {
     if(req.session.contact_no && req.session.contact_no != null && req.session.contact_no != ''){
-      // got to verify otp page
+      var goto = process.env.APPURI + '/otp';
+      res.writeHead(302, { 'Location': goto });
+      res.end();
     }else{
-      res.render('login', { layout: false, title: "Login" });
+      res.render('login/login', { title: "Login" });
     }
   }
 });
-router.post('/sendotp', async (req, res) => {
+router.post('/sendotp', async (req, res) => { 
   if (req.session.userid && req.session.userid != null && req.session.userid != '') {
-     // go to home page
+    var goto = process.env.APPURI + '/home';
+    res.writeHead(302, { 'Location': goto });
+    res.end();
   } else {
     if(req.session.contact_no && req.session.contact_no != null && req.session.contact_no != ''){
-      // got to verify otp page
+      var goto = process.env.APPURI + '/otp';
+      res.writeHead(302, { 'Location': goto });
+      res.end();
     }else{
       const { contactNo, countryCode } = req.body;
       if (contactNo && contactNo != '' && contactNo != null && contactNo.length > 9 && countryCode && countryCode != '' && countryCode != null) {
         let mobileno = countryCode + contactNo;
-        let otp = Math.floor(1000 + Math.random() * 9000);
-        client.messages.create({
-          from: process.env.TWILIO_MOBILE,
-          to: '+' + mobileno,
-          body: otp.toString() + " is the OTP for FreindsField Registration, This otp valid for 2 minutes"
-        }).then(async (response) => {
+        let otp = '1234'; //Math.floor(1000 + Math.random() * 9000);
+        // client.messages.create({
+        //   from: process.env.TWILIO_MOBILE,
+        //   to: '+' + mobileno,
+        //   body: otp.toString() + " is the OTP for FreindsField Registration, This otp valid for 2 minutes"
+        // }).then(async (response) => {
           let primary = mongoConnection.useDb(constants.DEFAULT_DB);
           let userdata = await primary.model(constants.MODELS.users, usersModel).findOne({ contact_no: mobileno }).lean();
           if (userdata != null) {
@@ -54,9 +62,9 @@ router.post('/sendotp', async (req, res) => {
           }
           req.session.contact_no = mobileno;
           return responseManager.onSuccess('Otp sent successfully!', 1, res);
-        }).catch((error) => {
-          return responseManager.onError(error, res);
-        });
+        // }).catch((error) => {
+        //   return responseManager.onError(error, res);
+        // });
       }else{
         return responseManager.onSuccess('Unable to send OTP, Contact number or country code invalid, Please try again!', 0, res);
       }

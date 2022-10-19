@@ -1,4 +1,4 @@
-app.controller("LoginController", ($scope, $http,) => {
+app.controller("LoginController", ($scope, $http, $interval, $location) => {
     $scope.countryCodes = [
         { displayvalue : '+91', value : '91' },
         { displayvalue : '+64', value : '64' },
@@ -79,7 +79,7 @@ app.controller("LoginController", ($scope, $http,) => {
     }
     $scope.sendotp = () => {
         $http({
-            url: BASE_URL+'sendotp',
+            url: BASE_URL+'login/sendotp',
             method: "POST",
             cache: false,
             data: {contactNo : $scope.userdata.contactnumber, countryCode : $scope.userdata.countrycode},
@@ -90,6 +90,7 @@ app.controller("LoginController", ($scope, $http,) => {
             function (response) {
                 if (response.data.IsSuccess == true && response.data.Data != 0) {
                     window.location.href = '/otp';
+                    sessionStorage.setItem("counter", 120);
                 } else {
                     window.location.href = AUTO_LOGOUT;
                 }
@@ -99,38 +100,45 @@ app.controller("LoginController", ($scope, $http,) => {
               }
         );
     };
-    $scope.onLogin = function () {
-        $('#loadingdiv').show();
-        $http({
-            url: BASE_URL,
-            method: "POST",
-            cache: false,
-            data: $scope.form,
-            headers: {
-                "Content-Type": "application/json; charset=UTF-8",
-            },
-        }).then(
-            function (response) {
-                if (response.data.IsSuccess == true && response.data.Data != 0) {
-                    sessionStorage.setItem("userName", response.data.Data[0].name);
-                    sessionStorage.setItem(CHANNEL_DATA, response.data.Data[0].channelId);
-                    sessionStorage.setItem(UNIQID, response.data.Data[0]._id);
-                    sessionStorage.setItem(USER_ROLE, response.data.Data[0].roleId.name);
-                    sessionStorage.setItem("LoginToken", response.data.Data[0].loginToken);
-                    window.location.href = "/chats";
-                } else {
-                    $('#loadingdiv').hide();
-                    swal("Oops", response.data.Message, "error")
-                }
-            },
-            function (error) {
-                $('#loadingdiv').hide();
-                console.log(error);
-                if (error.status == 401) {
-                    window.location.href = AUTO_LOGOUT;
-                }
-                console.error("Something Went Wrong! try again");
+    $scope.onOtpLoad = () => {
+        let url = $location.absUrl();
+        if(url.includes('otp')){
+            sessionStorage.getItem(CHANNEL_DATA)
+            sessionStorage.setItem("counter", 120);
+            $interval(function(){
+                let counter = sessionStorage.getItem("counter");
+                counter--;
+                sessionStorage.setItem("counter", counter);
+            },1000);
+        }
+    }
+    $scope.verifyOtp = () => {
+        if($scope.otp1 && $scope.otp2 && $scope.otp3 && $scope.otp4){
+            let otp = $scope.otp1 + $scope.otp2 + $scope.otp3 + $scope.otp4;
+            if(otp.length == 4){
+                $http({
+                    url: BASE_URL+'otp/verifyotp',
+                    method: "POST",
+                    cache: false,
+                    data: {otp: otp},
+                    headers: {
+                      "Content-Type": "application/json; charset=UTF-8",
+                    },
+                }).then(
+                    function (response) {
+                        if (response.data.IsSuccess == true && response.data.Data != 0) {
+                            window.location.href = '/profile';
+                        } else {
+                            window.location.href = AUTO_LOGOUT;
+                        }
+                      },
+                      function (error) {
+                        window.location.href = AUTO_LOGOUT;
+                      }
+                );
+            }else{
+
             }
-        );
+        }
     };
 });

@@ -105,7 +105,7 @@ router.get('/single', helper.authenticateToken, async (req, res) => {
         return responseManager.badrequest({ message: 'Invalid token to get notification, please try again' }, res);
     }
 });
-router.post('/setnotificationbanner', helper.authenticateToken, async (req, res) => {
+router.post('/setnotificationbanner', helper.authenticateToken,  multerFn.memoryUpload.single("file"), async (req, res) => {
     if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
         let primary = mongoConnection.useDb(constants.DEFAULT_DB);
         let userdata = await primary.model(constants.MODELS.users, usersModel).findById(req.token.userid).lean();
