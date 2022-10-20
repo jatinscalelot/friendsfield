@@ -1,4 +1,4 @@
-app.controller("LoginController", ($scope, $http, $interval, $location) => {
+app.controller("LoginController", ($scope, $http, $interval, $location, SocketService) => {
     $scope.countryCodes = [
         { displayvalue : '+91', value : '91' },
         { displayvalue : '+64', value : '64' },
@@ -126,7 +126,9 @@ app.controller("LoginController", ($scope, $http, $interval, $location) => {
                     },
                 }).then(
                     function (response) {
-                        if (response.data.IsSuccess == true && response.data.Data != 0) {
+                        if (response.data.IsSuccess == true && response.data.Data != 0 &&  response.data.Data.channelID) {
+                            sessionStorage.setItem(CHANNEL_DATA, response.data.Data.channelID);
+                            SocketService.emit("init", { channelID: sessionStorage.getItem(CHANNEL_DATA) });
                             window.location.href = '/profile';
                         } else {
                             window.location.href = AUTO_LOGOUT;

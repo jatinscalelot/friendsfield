@@ -50,7 +50,8 @@ const webpaths = [
   { pathUrl: '/', routeFile: 'index'},
   { pathUrl: '/login', routeFile: 'login' },
   { pathUrl: '/otp', routeFile: 'otp' },
-  { pathUrl: '/profile', routeFile: 'profile' }
+  { pathUrl: '/profile', routeFile: 'profile' },
+  { pathUrl: '/chats', routeFile: 'chats' }
 ];
 webpaths.forEach((path) => {
 	app.use(path.pathUrl, require('./routes/web/' + path.routeFile));

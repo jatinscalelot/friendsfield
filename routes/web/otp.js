@@ -34,7 +34,7 @@ router.post('/verifyotp', async (req, res) => {
           delete userdata.otp_timestamp;
           await primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(userdata._id, { channelID: userdata._id.toString().toUpperCase() }).lean();
           req.session.userid = userdata._id.toString();
-          return responseManager.onSuccess('Otp verified successfully!', 1, res);
+          return responseManager.onSuccess('Otp verified successfully!', {channelID: userdata._id.toString().toUpperCase()}, res);
         } else {
           return responseManager.badrequest({ message: 'Invalid user to verify user OTP, please try again' }, res);
         }
