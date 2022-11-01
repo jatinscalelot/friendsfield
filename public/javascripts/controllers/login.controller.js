@@ -103,13 +103,15 @@ app.controller("LoginController", ($scope, $http, $interval, $location, SocketSe
     $scope.onOtpLoad = () => {
         let url = $location.absUrl();
         if(url.includes('otp')){
-            sessionStorage.getItem(CHANNEL_DATA)
-            sessionStorage.setItem("counter", 120);
-            $interval(function(){
-                let counter = sessionStorage.getItem("counter");
-                counter--;
-                sessionStorage.setItem("counter", counter);
-            },1000);
+            let counter = sessionStorage.getItem("counter");
+            if(!counter || counter == undefined){
+                sessionStorage.setItem("counter", 120);
+                $interval(function(){
+                    let counter = sessionStorage.getItem("counter");
+                    counter--;
+                    sessionStorage.setItem("counter", counter);
+                },1000);
+            }
         }
     }
     $scope.verifyOtp = () => {

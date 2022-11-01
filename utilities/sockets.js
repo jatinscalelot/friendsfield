@@ -17,4 +17,4 @@ module.exports.onIncomingCall = (channelId, friendId) => {
 };
 module.exports.onNewNotification = (channelId, notificationId) => {
     io.in(channelId).emit('incomingNotification', notificationId);
-}
+};

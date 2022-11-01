@@ -129,28 +129,28 @@ router.post('/updatefriendrequest', helper.authenticateToken, async (req, res) =
                                 await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(checkExisting._id, { status: 'accepted', receiver_scope: authorized_permissions });
                                 return responseManager.onSuccess("Friend request accepted successfully!", 1, res);
                             } else {
-                                return responseManager.badrequest({ message: 'Invalid status to update friend request, only sent request can be accepted , please try again' }, res);
+                                return responseManager.badrequest({ message: 'Invalid status to update friend request, only sent friend request can be accepted , please try again' }, res);
                             }
                         } else if (status == 'blocked') {
                             if (checkExisting.status == 'sent') {
                                 await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(checkExisting._id, { status: 'blocked' });
                                 return responseManager.onSuccess("Friend blocked successfully!", 1, res);
                             } else {
-                                return responseManager.badrequest({ message: 'Invalid status to update friend, only sent or accepted friends can be blocked, please try again' }, res);
+                                return responseManager.badrequest({ message: 'Invalid status to update friend request, only sent or accepted friend request can be blocked, please try again' }, res);
                             }
                         } else if (status == 'rejected') {
                             if (checkExisting.status == 'sent') {
                                 await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(checkExisting._id, { status: 'rejected' });
                                 return responseManager.onSuccess("Friend request rejected successfully!", 1, res);
                             } else {
-                                return responseManager.badrequest({ message: 'Invalid status to update friend request, only sent request can be rejected, please try again' }, res);
+                                return responseManager.badrequest({ message: 'Invalid status to update friend request, only sent friend request can be rejected, please try again' }, res);
                             }
                         } else if (status == 'unblocked') {
                             if (checkExisting.status == 'blocked') {
                                 await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndRemove(checkExisting._id);
                                 return responseManager.onSuccess("Friend unblocked successfully!", 1, res);
                             } else {
-                                return responseManager.badrequest({ message: 'Invalid status to update friend, only blocked friends can be unblocked, please try again' }, res);
+                                return responseManager.badrequest({ message: 'Invalid status to update friend request, only blocked friend request can be unblocked, please try again' }, res);
                             }
                         }
                     } else {

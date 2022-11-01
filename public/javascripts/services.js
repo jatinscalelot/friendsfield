@@ -1,6 +1,6 @@
 //CUSTOM SERVICES
 app.service('HelperService', function() {
-    this.errorDetector = function(error) {
+    this.errorDetector = (error) => {
         if (error.status == 403) {
             swal(error.data.Message, { icon: "error" });
         }
@@ -8,14 +8,14 @@ app.service('HelperService', function() {
             window.location.href = AUTO_LOGOUT;
         }
     }
-    this.queryString = function(key) {
+    this.queryString = (key) => {
         var url_string = window.location.href;
         var url = new URL(url_string);
         var value = url.searchParams.get(key);
         return value;
     };
 
-    this.checkWindow = function(lastMessageAt) {
+    this.checkWindow = (lastMessageAt) => {
         let currentDate = new Date();
         if(lastMessageAt && lastMessageAt != undefined && lastMessageAt != null){
             let time = timeDiffCalc(lastMessageAt, currentDate);
@@ -29,7 +29,7 @@ app.service('HelperService', function() {
         }
     }
 
-    this.mobileNumberValidator = function(mobileNumber) {
+    this.mobileNumberValidator = (mobileNumber) => {
         let mLength = mobileNumber.toString().trim().length;
         if (mLength >= 11) {
             if (!isNaN(mobileNumber)) {
@@ -42,13 +42,11 @@ app.service('HelperService', function() {
         }
     }
 
-    this.paginator = function(totalPages, page, maxLength) {
+    this.paginator = (totalPages, page, maxLength) => {
         if (maxLength < 5) throw "maxLength must be at least 5";
-
         function range(start, end) {
             return Array.from(Array(end - start + 1), (_, i) => i + start);
         }
-
         var sideWidth = maxLength < 9 ? 1 : 2;
         var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
         var rightWidth = (maxLength - sideWidth * 2 - 2) >> 1;
@@ -63,12 +61,11 @@ app.service('HelperService', function() {
             return range(1, sideWidth)
                 .concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
         }
-
         return range(1, sideWidth)
             .concat(0, range(page - leftWidth, page + rightWidth),
                 0, range(totalPages - sideWidth + 1, totalPages));
     }
-	this.getRandomColors = function (doc_Length) {
+	this.getRandomColors = (doc_Length) => {
 		let arrayList = [];
 		const Colors = [
 			'bg-primary',

@@ -5,7 +5,7 @@ exports.onSuccess = (message, result, res) => {
 		Status: 200,
 		IsSuccess: true
 	});
-}
+};
 exports.onError = (error, res) => {
 	console.log(error.message);
 	res.status(500).json({
@@ -14,7 +14,7 @@ exports.onError = (error, res) => {
 		Status: 500,
 		IsSuccess: false
 	});
-}
+};
 exports.unauthorisedRequest = (res) => {
 	res.status(401).json({
 		Message: "Unauthorized Request!",
@@ -22,7 +22,7 @@ exports.unauthorisedRequest = (res) => {
 		Status: 401,
 		IsSuccess: false
 	});
-}
+};
 exports.forbiddenRequest = (res) => {
 	res.status(403).json({
 		Message: "Access to the requested resource is forbidden! Contact Administrator.",
@@ -30,7 +30,7 @@ exports.forbiddenRequest = (res) => {
 		Status: 403,
 		IsSuccess: false
 	});
-}
+};
 exports.badrequest = (error, res) => {
 	console.log(error.message);
 	res.status(400).json({
@@ -39,7 +39,7 @@ exports.badrequest = (error, res) => {
 		Status: 400,
 		IsSuccess: false
 	});
-}
+};
 exports.joiBadRequest = (err, res) => {
 	res.status(400).json({
 		Message: err.message,
@@ -47,4 +47,4 @@ exports.joiBadRequest = (err, res) => {
 		Status: 400,
 		IsSuccess: false
 	});
-}
+};

@@ -1,4 +1,3 @@
-//CUSTOM DIRECTIVES
 app.directive("fileInput", function ($parse) {
     return {
         link: function ($scope, element, attrs) {
@@ -11,7 +10,6 @@ app.directive("fileInput", function ($parse) {
         }
     }
 });
-
 app.directive('tooltip', function(){
     return {
         restrict: 'A',
@@ -24,14 +22,12 @@ app.directive('tooltip', function(){
         }
     };
 });
-
 app.directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
             var model = $parse(attrs.fileModel);
             var modelSetter = model.assign;
-
             element.bind('change', function () {
                 scope.$apply(function () {
                     console.dir(element[0].files[0]);
@@ -41,7 +37,6 @@ app.directive('fileModel', ['$parse', function ($parse) {
         }
     };
 }]);
-
 app.directive('stopccp', function () {
     return {
         scope: {},
@@ -52,8 +47,6 @@ app.directive('stopccp', function () {
         }
     };
 });
-
-
 app.directive("directiveWhenScrolled", function () {
     return function (scope, elm, attr) {
         var raw = elm[0];
@@ -64,7 +57,6 @@ app.directive("directiveWhenScrolled", function () {
         });
     };
 });
-
 app.directive("directiveWhenScrolledUp", function () {
     return function (scope, elm, attr) {
         var raw = elm[0];
@@ -78,7 +70,6 @@ app.directive("directiveWhenScrolledUp", function () {
         });
     };
 });
-
 app.directive('intlBox', function () {
     return {
         link: function (scope, elem, attrs) {
@@ -87,7 +78,6 @@ app.directive('intlBox', function () {
         }
     };
 });
-
 app.directive('lightgallery', function() {
     return {
       restrict: 'A',
@@ -98,7 +88,6 @@ app.directive('lightgallery', function() {
       }
     };
 });
-
 app.directive('ng-dropzone', function () {
     return {
         restrict: 'AE',
