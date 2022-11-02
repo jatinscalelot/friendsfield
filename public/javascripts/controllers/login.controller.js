@@ -128,7 +128,7 @@ app.controller("LoginController", ($scope, $http, $interval, $location, SocketSe
                     },
                 }).then(
                     function (response) {
-                        if (response.data.IsSuccess == true && response.data.Data != 0 &&  response.data.Data.channelID) {
+                        if (response.data.IsSuccess == true && response.data.Data != 0 && response.data.Data.channelID) {
                             sessionStorage.setItem(CHANNEL_DATA, response.data.Data.channelID);
                             SocketService.emit("init", { channelID: sessionStorage.getItem(CHANNEL_DATA) });
                             window.location.href = '/profile';
@@ -141,7 +141,7 @@ app.controller("LoginController", ($scope, $http, $interval, $location, SocketSe
                       }
                 );
             }else{
-
+                swal("", "Invalid otp, please try again", "error");
             }
         }
     };
