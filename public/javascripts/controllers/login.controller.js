@@ -133,10 +133,12 @@ app.controller("LoginController", ($scope, $http, $interval, $location, SocketSe
                             SocketService.emit("init", { channelID: sessionStorage.getItem(CHANNEL_DATA) });
                             window.location.href = '/profile';
                         } else {
+                            swal("", "Invalid otp, please try again", "error");
                             window.location.href = AUTO_LOGOUT;
                         }
                       },
                       function (error) {
+                        swal("", "Invalid otp, please try again", "error");
                         window.location.href = AUTO_LOGOUT;
                       }
                 );
