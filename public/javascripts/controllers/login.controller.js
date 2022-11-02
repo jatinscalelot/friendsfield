@@ -143,6 +143,8 @@ app.controller("LoginController", ($scope, $http, $interval, $location, SocketSe
             }else{
                 swal("", "Invalid otp, please try again", "error");
             }
+        }else{
+            swal("", "Invalid otp, please try again", "error");
         }
     };
 });
