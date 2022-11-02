@@ -97,7 +97,9 @@ router.post('/sendfriendrequest', helper.authenticateToken, async (req, res) => 
                         receiverid: mongoose.Types.ObjectId(receiverid),
                         message: message,
                         timestamp: Date.now(),
-                        status: 'sent'
+                        status: 'sent',
+                        createdBy: mongoose.Types.ObjectId(userdata._id),
+                        updatedBy: mongoose.Types.ObjectId(userdata._id)
                     };
                     await primary.model(constants.MODELS.friendrequests, friendrequestsModel).create(obj);
                     return responseManager.onSuccess("Friend request sent successfully!", 1, res);
@@ -126,21 +128,21 @@ router.post('/updatefriendrequest', helper.authenticateToken, async (req, res) =
                     if (checkExisting != null) {
                         if (status == 'accepted') {
                             if (checkExisting.status == 'sent') {
-                                await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(checkExisting._id, { status: 'accepted', receiver_scope: authorized_permissions });
+                                await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(checkExisting._id, { status: 'accepted', receiver_scope: authorized_permissions, updatedBy: mongoose.Types.ObjectId(userdata._id)});
                                 return responseManager.onSuccess("Friend request accepted successfully!", 1, res);
                             } else {
                                 return responseManager.badrequest({ message: 'Invalid status to update friend request, only sent friend request can be accepted , please try again' }, res);
                             }
                         } else if (status == 'blocked') {
                             if (checkExisting.status == 'sent') {
-                                await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(checkExisting._id, { status: 'blocked' });
+                                await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(checkExisting._id, { status: 'blocked', updatedBy: mongoose.Types.ObjectId(userdata._id) });
                                 return responseManager.onSuccess("Friend blocked successfully!", 1, res);
                             } else {
                                 return responseManager.badrequest({ message: 'Invalid status to update friend request, only sent or accepted friend request can be blocked, please try again' }, res);
                             }
                         } else if (status == 'rejected') {
                             if (checkExisting.status == 'sent') {
-                                await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(checkExisting._id, { status: 'rejected' });
+                                await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(checkExisting._id, { status: 'rejected', updatedBy: mongoose.Types.ObjectId(userdata._id) });
                                 return responseManager.onSuccess("Friend request rejected successfully!", 1, res);
                             } else {
                                 return responseManager.badrequest({ message: 'Invalid status to update friend request, only sent friend request can be rejected, please try again' }, res);
@@ -188,7 +190,7 @@ router.post('/unfriendorblock', helper.authenticateToken, async (req, res) => {
                         await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndRemove(existingFriendRequest._id);
                         return responseManager.onSuccess("unfriend successfully!", 1, res);
                     } else if (status == 'blocked') {
-                        await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(existingFriendRequest._id, { status: 'blocked' });
+                        await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(existingFriendRequest._id, { status: 'blocked', updatedBy: mongoose.Types.ObjectId(userdata._id) });
                         return responseManager.onSuccess("friend blocked successfully!", 1, res);
                     }
                 } else {
@@ -220,10 +222,10 @@ router.post('/set_authorized_permissions', helper.authenticateToken, async (req,
                 }).lean();
                 if (existingFriendRequest) {
                     if (existingFriendRequest.receiverid.toString() == req.token.userid.toString()) {
-                        await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(existingFriendRequest._id, { receiver_scope: authorized_permissions });
+                        await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(existingFriendRequest._id, { receiver_scope: authorized_permissions, updatedBy: mongoose.Types.ObjectId(userdata._id) });
                         return responseManager.onSuccess("Authorized permissions successfully!", 1, res);
                     } else {
-                        await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(existingFriendRequest._id, { sender_scope: authorized_permissions });
+                        await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(existingFriendRequest._id, { sender_scope: authorized_permissions, updatedBy: mongoose.Types.ObjectId(userdata._id) });
                         return responseManager.onSuccess("Authorized permissions successfully!", 1, res);
                     }
                 } else {

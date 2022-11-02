@@ -13,7 +13,8 @@ router.post('/sendotp', async (req, res) => {
     const { contactNo, countryCode } = req.body;
     if(contactNo && contactNo != '' && contactNo != null && contactNo.length > 9 && countryCode && countryCode != '' && countryCode != null){
         let mobileno = countryCode+contactNo;
-        let otp = '1234';//Math.floor(1000 + Math.random() * 9000);
+        let otp = '1234';
+        //Math.floor(1000 + Math.random() * 9000);
         // console.log('process.env.TWILIO_ACCOUNT_SID', process.env.TWILIO_ACCOUNT_SID);
         // console.log('client', client);
         // client.messages.create({
