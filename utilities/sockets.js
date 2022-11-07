@@ -6,8 +6,12 @@ io.on("connection", function (client) {
         client.join(data.channelID);
     });
 });
-module.exports.onIncomingChat = (channelId, customerId) => {
-    io.in(channelId).emit('newMessage', customerId);
+module.exports.onIncomingChat = (channelId, reqData, customername) => {
+    if(customername == '' || customername == undefined){
+        customername = reqData.from;
+    }
+    reqData.customername = customername;
+    io.in(channelId).emit('newMessage', reqData);
 };
 module.exports.onIncomingFriendRequest = (channelId, friendrequestId) => {
     io.in(channelId).emit('newFriendRequest', friendrequestId);

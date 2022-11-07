@@ -5,7 +5,9 @@ app.controller("ChatsController", ($scope, $http, SocketService, HelperService, 
     }else{
         window.location.href = AUTO_LOGOUT;
     }
+    $scope.contact_number = sessionStorage.getItem(CONTACTNO);
     $scope.friendsList = () => {
         
     };
 });
+

@@ -16,80 +16,58 @@ $(function() {
     }     
   });
 });
-
 // aside-toggle 
 $('.slide-toggle').click(function(j) {   
   $(".main, .slide-toggle").toggleClass('.faq-actives')
 });
-
-
 function addClassFunction(idf, clf) {
   document.getElementById(idf).classList.add(clf);
 }
 function removeClassFunction(idf, clf) {
   document.getElementById(idf).classList.remove(clf);
 }
-
 // setting tab js 
-
 $(document).ready(function(){
-	
 	$('.sum').click(function(){
 		var tab_id = $(this).attr('data-tab');
-
 		$('sum').removeClass('current');
 		$('.tab-content').removeClass('current');
-
 		$(this).addClass('current');
 		$("#"+tab_id).addClass('current');
 	})
-
 })
-
 // aside-toggle 
   $('.slide-toggle').click(function(j) {   
       $(".main, .slide-toggle").toggleClass('active')
   });
-
   // tab-toggle /
   $(document).ready(function(){
-
     $('.teb-btn h5').click(function(){
       var tab_id = $(this).attr('data-tab');
-
       $('.teb-btn h5').removeClass('current');
       $('.info-text').removeClass('current');
-
       $(this).addClass('current');
       $("#"+tab_id).addClass('current');
     })
-
   });
-
   // addremoveclasss
-
   function addFunction1(id, clasA) {
     var element = document.getElementById(id);
     element.classList.add(clasA);
   }
-  
   function removeFunction(id, clasA) {
     var element = document.getElementById(id);
     element.classList.remove(clasA);
   }
-
   function toggleFunction(id, clasA) {
     var element = document.getElementById(id);
     element.classList.toggle(clasA);
   }
-
 // range slider
-
   const settings={
     fill: '#2DCAD4',
     background: '#E8E8E8',
   } 
-
 const sliders = document.querySelectorAll(".range-slider");
 Array.prototype.forEach.call(sliders, (slider) => {
   slider.querySelector("input").addEventListener("input", (event) => {
@@ -106,18 +84,15 @@ function applyFill(slider) {
   } ${percentage + 0.1}%)`;
   slider.style.background = bg;
 }
-
 // select_all radio button
 $("#checkAll").click(function () {
   $('.round input:checkbox').not(this).prop('checked', this.checked);
 });
-
 // otp
 let digitValidate = function(ele){
   console.log(ele.value);
   ele.value = ele.value.replace(/[^0-9]/g,'');
 }
-
 let tabChange = function(val){
     let ele = document.querySelectorAll('input');
     if(ele[val-1].value != ''){
@@ -126,55 +101,52 @@ let tabChange = function(val){
       ele[val-2].focus()
     }   
 }
-
 $(document).on('input', '#slider', function() {
   $('#slider_value').html( $(this).val() );
 });
-
 // friends Requests tabs
 $(document).ready(function(){
-      
   $('.tab-menu button').click(function(){
     var tab_id = $(this).attr('data-tab');
-
     $('.tab-menu button').removeClass('current');
     $('.info-text').removeClass('current');
-
     $(this).addClass('current');
     $("#"+tab_id).addClass('current');
   })
-
 });
-
 window.onload = function () {
   slideOne();
   slideTwo();
 };
-
 let sliderOne = document.getElementById("slider-1");
 let sliderTwo = document.getElementById("slider-2");
 let displayValOne = document.getElementById("range1");
 let displayValTwo = document.getElementById("range2");
 let minGap = 0;
 let sliderTrack = document.querySelector(".slider-track");
-let sliderMaxValue = document.getElementById("slider-1").max;
-
+let sliderMaxValue = (document.getElementById("slider-1") && document.getElementById("slider-1") != null) ? document.getElementById("slider-1").max : 0;
 function slideOne() {
-  if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
-    sliderOne.value = parseInt(sliderTwo.value) - minGap;
+  if(sliderTwo && sliderTwo != null){
+    if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+      sliderOne.value = parseInt(sliderTwo.value) - minGap;
+    }
+    displayValOne.textContent = sliderOne.value;
+    fillColor();
   }
-  displayValOne.textContent = sliderOne.value;
-  fillColor();
 };
 function slideTwo() {
-  if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
-    sliderTwo.value = parseInt(sliderOne.value) + minGap;
+  if(sliderTwo && sliderTwo != null){
+    if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+      sliderTwo.value = parseInt(sliderOne.value) + minGap;
+    }
+    displayValTwo.textContent = sliderTwo.value;
+    fillColor();
   }
-  displayValTwo.textContent = sliderTwo.value;
-  fillColor();
 };
 function fillColor() {
-  percent1 = (sliderOne.value / sliderMaxValue) * 100;
-  percent2 = (sliderTwo.value / sliderMaxValue) * 100;
-  sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #2DCAD4 ${percent1}% , #2DCAD4 ${percent2}%, #dadae5 ${percent2}%)`;
+  if(sliderOne && sliderTwo){
+    percent1 = (sliderOne.value / sliderMaxValue) * 100;
+    percent2 = (sliderTwo.value / sliderMaxValue) * 100;
+    sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #2DCAD4 ${percent1}% , #2DCAD4 ${percent2}%, #dadae5 ${percent2}%)`;
+  }
 };

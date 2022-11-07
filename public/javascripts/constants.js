@@ -4,4 +4,5 @@ const ACCESS_TOKEN = "ACCESSTOKEN";
 const USER_ROLE = "USER_ROLE";
 const CHANNEL_DATA = "channelID";
 const UNIQID = "UNIQUSERID";
+const CONTACTNO = "CONTACTNO";
 const app = angular.module("FriendsField", ["btford.socket-io"]);

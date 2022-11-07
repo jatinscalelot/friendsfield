@@ -26,7 +26,7 @@ router.post('/', helper.authenticateToken, async (req, res) => {
             limit: parseInt(limit),
             populate: [
                 { path: 'from', model: primary.model(constants.MODELS.users, userModel), select: "profileimage fullName emailId contact_no" },
-                { path: 'to', model: primary.model(constants.MODELS.users, userModel),  select: "profileimage fullName emailId contact_no" },
+                { path: 'to', model: primary.model(constants.MODELS.users, userModel), select: "profileimage fullName emailId contact_no" },
                 { path: 'content.product.productid', model: primary.model(constants.MODELS.products, productModel), select: "name price description category subCategory offer itemCode images" },
                 { path: 'context', model: primary.model(constants.MODELS.chats, chatModel)},
             ],
@@ -46,43 +46,61 @@ router.post('/send', helper.authenticateToken, multerFn.memoryUpload.single("fil
         let primary = mongoConnection.useDb(constants.DEFAULT_DB);
         const { to, message, product, context } = req.body;
         if(to && to != null && to != undefined && mongoose.Types.ObjectId.isValid(to)){
-            let messageData = {
-                from : mongoose.Types.ObjectId(req.token.userid),
-                to : mongoose.Types.ObjectId(to),
-                context : (context && context != '' && mongoose.Types.ObjectId.isValid(context)) ? mongoose.Types.ObjectId(context) : null,
-                contentType : '',
-                content : {
-                    text : {},
-                    media : {},
-                    product : {}
-                },
-                timestamp : Date.now(),
-                status : 'sent' 
-            };
-            if(req.file){
-                let uploadResult = await AwsCloud.saveToS3(req.file.buffer, req.token.userid.toString(), req.file.mimetype, 'chat');
-                if(uploadResult){
-                    messageData.content.media.path = uploadResult.data.Key;
-                    messageData.content.media.type = helper.getFileType(req.file.mimetype);
-                    messageData.content.media.mime = req.file.mimetype;
-                    let f1 = uploadResult.data.Key.split("/");
-                    messageData.content.media.name = f1[f1.length - 1];
-                }
-                if(message && message != null && message.trim() != ''){
+            let fromuser = await primary.model(constants.MODELS.users, userModel).findById(req.token.userid).lean();
+            let touser = await primary.model(constants.MODELS.users, userModel).findById(to).lean();
+            if(touser){
+                let messageData = {
+                    from : mongoose.Types.ObjectId(req.token.userid),
+                    to : mongoose.Types.ObjectId(to),
+                    context : (context && context != '' && mongoose.Types.ObjectId.isValid(context)) ? mongoose.Types.ObjectId(context) : null,
+                    contentType : '',
+                    content : {
+                        text : {},
+                        media : {},
+                        product : {}
+                    },
+                    timestamp : Date.now(),
+                    status : 'sent' 
+                };
+                if(req.file){
+                    let uploadResult = await AwsCloud.saveToS3(req.file.buffer, req.token.userid.toString(), req.file.mimetype, 'chat');
+                    if(uploadResult){
+                        messageData.content.media.path = uploadResult.data.Key;
+                        messageData.content.media.type = helper.getFileType(req.file.mimetype);
+                        messageData.content.media.mime = req.file.mimetype;
+                        let f1 = uploadResult.data.Key.split("/");
+                        messageData.content.media.name = f1[f1.length - 1];
+                    }
+                    if(message && message != null && message.trim() != ''){
+                        messageData.content.text.message = message;
+                        messageData.contentType = 'mediawithtext';
+                    }else{
+                        messageData.contentType = 'media';
+                    }
+                }else if(product && product != null && product != undefined && mongoose.Types.ObjectId.isValid(product)){
+                    messageData.content.product.productid = mongoose.Types.ObjectId(product);
+                    messageData.contentType = 'product';
+                }else if(message && message != null && message.trim() != ''){
                     messageData.content.text.message = message;
-                    messageData.contentType = 'mediawithtext';
-                }else{
-                    messageData.contentType = 'media';
+                    messageData.contentType = 'text';
                 }
-            }else if(product && product != null && product != undefined && mongoose.Types.ObjectId.isValid(product)){
-                messageData.content.product.productid = mongoose.Types.ObjectId(product);
-                messageData.contentType = 'product';
-            }else if(message && message != null && message.trim() != ''){
-                messageData.content.text.message = message;
-                messageData.contentType = 'text';
+                let response = await primary.model(constants.MODELS.chats, chatModel).create(messageData);
+                if(touser.channelID && touser.channelID != '' && touser.channelID != null){
+                    socketBox.onIncomingChat(touser.channelID, messageData, fromuser.fullName);
+                }
+                if(touser.fcmtoken && touser.fcmtoken != '' && touser.fcmtoken != null){
+                    let payload = {
+                        notification: {
+                            title: 'New message from ' + fromuser.fullName + ':' + message,
+                            body: "",
+                        }
+                    };
+                    firebaseHelper.sendNotification(touser.fcmtoken, payload);
+                }
+                return responseManager.onSuccess('message sent successfully...', response, res);
+            }else{
+                return responseManager.badrequest({ message: 'Invalid recipient id to send message, please try again' }, res);
             }
-            let response = await primary.model(constants.MODELS.chats, chatModel).create(messageData);
-            return responseManager.onSuccess('message sent successfully...', response, res);
         }else{
             return responseManager.badrequest({ message: 'Invalid recipient id to send message, please try again' }, res);
         }

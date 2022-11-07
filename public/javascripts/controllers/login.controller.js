@@ -130,6 +130,7 @@ app.controller("LoginController", ($scope, $http, $interval, $location, SocketSe
                     function (response) {
                         if (response.data.IsSuccess == true && response.data.Data != 0 && response.data.Data.channelID) {
                             sessionStorage.setItem(CHANNEL_DATA, response.data.Data.channelID);
+                            sessionStorage.setItem(CONTACTNO, response.data.Data.contactNo);
                             SocketService.emit("init", { channelID: sessionStorage.getItem(CHANNEL_DATA) });
                             window.location.href = '/profile';
                         } else {
