@@ -2,8 +2,12 @@ const io = require("socket.io")();
 const socketapi = { io: io };
 module.exports.server = socketapi;
 io.on("connection", function (client) {
-    client.on('init', async function (data) {
+    client.on('init', async (data) => {
+        console.log('client init -->', data);
         client.join(data.channelID);
+    });
+    client.on('disconnect', async (data) => {
+        console.log('client disconnect -->', data);
     });
 });
 module.exports.onIncomingChat = (channelId, reqData, customername) => {

@@ -132,6 +132,9 @@ app.controller("LoginController", ($scope, $http, $interval, $location, SocketSe
                             sessionStorage.setItem(CHANNEL_DATA, response.data.Data.channelID);
                             sessionStorage.setItem(CONTACTNO, response.data.Data.contactNo);
                             SocketService.emit("init", { channelID: sessionStorage.getItem(CHANNEL_DATA) });
+                            // SocketService.on("disconnect", () => {
+                            //     console.log(socket.id); // undefined
+                            // });
                             window.location.href = '/profile';
                         } else {
                             swal("Invalid otp, please try again.")

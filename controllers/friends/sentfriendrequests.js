@@ -47,7 +47,11 @@ exports.sentfriendrequests = async (req, res) => {
                         interestedin : friendrequest.receiverid.interestedin,
                         profileimage : friendrequest.receiverid.profileimage,
                         request_message : friendrequest.message,
-                        request_id : friendrequest._id
+                        request_id : friendrequest._id,
+                        status : friendrequest.status,
+                        createdAt : friendrequest.createdAt,
+                        updatedAt : friendrequest.updatedAt,
+                        timestamp : friendrequest.timestamp,
                     };
                     docs.push(obj);
                     next_friendrequest();
