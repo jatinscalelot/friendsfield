@@ -40,6 +40,10 @@ exports.myfriends = async (req, res) => {
                                 age : friendrequest.receiverid.age,
                                 interestedin : friendrequest.receiverid.interestedin,
                                 profileimage : friendrequest.receiverid.profileimage,
+                                status : friendrequest.status,
+                                createdAt : friendrequest.createdAt,
+                                updatedAt : friendrequest.updatedAt,
+                                timestamp : friendrequest.timestamp,
                             };
                             if(friendrequest.receiver_scope.fullname){obj.fullName = friendrequest.receiverid.fullName;}
                             if(friendrequest.receiver_scope.contactnumber){obj.contact_no = friendrequest.receiverid.contact_no;}
@@ -64,7 +68,11 @@ exports.myfriends = async (req, res) => {
                                 gender : friendrequest.receiverid.gender,
                                 dob : friendrequest.receiverid.dob,
                                 interestedin : friendrequest.receiverid.interestedin,
-                                profileimage : friendrequest.receiverid.profileimage
+                                profileimage : friendrequest.receiverid.profileimage,
+                                status : friendrequest.status,
+                                createdAt : friendrequest.createdAt,
+                                updatedAt : friendrequest.updatedAt,
+                                timestamp : friendrequest.timestamp,
                             };
                             docs.push(obj);
                         }
@@ -80,6 +88,10 @@ exports.myfriends = async (req, res) => {
                                 age : friendrequest.senderid.age,
                                 interestedin : friendrequest.senderid.interestedin,
                                 profileimage : friendrequest.senderid.profileimage,
+                                status : friendrequest.status,
+                                createdAt : friendrequest.createdAt,
+                                updatedAt : friendrequest.updatedAt,
+                                timestamp : friendrequest.timestamp,
                             };
                             if(friendrequest.sender_scope.fullname){obj.fullName = friendrequest.senderid.fullName;}
                             if(friendrequest.sender_scope.contactnumber){obj.contact_no = friendrequest.senderid.contact_no;}
@@ -104,7 +116,11 @@ exports.myfriends = async (req, res) => {
                                 gender : friendrequest.senderid.gender,
                                 dob : friendrequest.senderid.dob,
                                 interestedin : friendrequest.senderid.interestedin,
-                                profileimage : friendrequest.senderid.profileimage
+                                profileimage : friendrequest.senderid.profileimage,
+                                status : friendrequest.status,
+                                createdAt : friendrequest.createdAt,
+                                updatedAt : friendrequest.updatedAt,
+                                timestamp : friendrequest.timestamp,
                             };
                             docs.push(obj);
                         }

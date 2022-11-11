@@ -44,7 +44,11 @@ exports.blockedrequest = async (req, res) => {
                             gender : friendrequest.receiverid.gender,
                             dob : friendrequest.receiverid.dob,
                             interestedin : friendrequest.receiverid.interestedin,
-                            profileimage : friendrequest.receiverid.profileimage
+                            profileimage : friendrequest.receiverid.profileimage,
+                            status : friendrequest.status,
+                            createdAt : friendrequest.createdAt,
+                            updatedAt : friendrequest.updatedAt,
+                            timestamp : friendrequest.timestamp,
                         };
                         docs.push(obj);
                     }else{
@@ -63,7 +67,11 @@ exports.blockedrequest = async (req, res) => {
                             gender : friendrequest.senderid.gender,
                             dob : friendrequest.senderid.dob,
                             interestedin : friendrequest.senderid.interestedin,
-                            profileimage : friendrequest.senderid.profileimage
+                            profileimage : friendrequest.senderid.profileimage,
+                            status : friendrequest.status,
+                            createdAt : friendrequest.createdAt,
+                            updatedAt : friendrequest.updatedAt,
+                            timestamp : friendrequest.timestamp,
                         };
                         docs.push(obj);
                     }
