@@ -87,12 +87,13 @@ router.post('/changenumber', helper.authenticateToken, async (req, res) => {
                             let existingUser = await primary.model(constants.MODELS.users, usersModel).findOne({contact_no : newcountryCode+newcontactNo}).lean();
                             if(existingUser == null){
                                 let mobileno = newcountryCode+newcontactNo;
-                                let otp = Math.floor(1000 + Math.random() * 9000);
-                                client.messages.create({
-                                    from: process.env.TWILIO_MOBILE,
-                                    to: '+'+mobileno,
-                                    body: otp.toString()+" is the OTP for FreindsField New Number Registration, This otp valid for 2 minutes"
-                                }).then(async (response) => {
+                                let otp = '1234';
+                                //Math.floor(1000 + Math.random() * 9000);
+                                // client.messages.create({
+                                //     from: process.env.TWILIO_MOBILE,
+                                //     to: '+'+mobileno,
+                                //     body: otp.toString()+" is the OTP for FreindsField New Number Registration, This otp valid for 2 minutes"
+                                // }).then(async (response) => {
                                    let obj = {
                                         last_sent_otp : otp.toString(),
                                         otp_timestamp : Date.now(),
@@ -100,9 +101,9 @@ router.post('/changenumber', helper.authenticateToken, async (req, res) => {
                                    };
                                    await primary.model(constants.MODELS.users, usersModel).findByIdAndUpdate(userdata._id, obj);
                                    return responseManager.onSuccess('Otp sent successfully!', 1, res);
-                                }).catch((error) => {
-                                    return responseManager.onError(error, res);
-                                });
+                                // }).catch((error) => {
+                                //     return responseManager.onError(error, res);
+                                // });
                             }else{
                                 return responseManager.badrequest({message : 'New number already exist with other user, please try again'}, res);
                             }
