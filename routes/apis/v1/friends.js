@@ -274,7 +274,17 @@ router.post('/getone', helper.authenticateToken, async (req, res) => {
                                 createdAt : friendrequest.createdAt,
                                 updatedAt : friendrequest.updatedAt,
                                 timestamp : friendrequest.timestamp,
-                                business : businessData
+                                business : businessData,
+                                permissions : (friendrequest.sender_scope) ? friendrequest.sender_scope : {
+                                    fullname: true,
+                                    contactnumber: true,
+                                    email: true,
+                                    dob: true,
+                                    gender: true,
+                                    socialmedia: true,
+                                    videocall: true,
+                                    audiocall :true
+                                }
                             };
                             if(friendrequest.receiver_scope.fullname){obj.fullName = friendrequest.receiverid.fullName;}
                             if(friendrequest.receiver_scope.contactnumber){obj.contact_no = friendrequest.receiverid.contact_no;}
@@ -304,7 +314,17 @@ router.post('/getone', helper.authenticateToken, async (req, res) => {
                                 createdAt : friendrequest.createdAt,
                                 updatedAt : friendrequest.updatedAt,
                                 timestamp : friendrequest.timestamp,
-                                business : businessData
+                                business : businessData,
+                                permissions : (friendrequest.sender_scope) ? friendrequest.sender_scope : {
+                                    fullname: true,
+                                    contactnumber: true,
+                                    email: true,
+                                    dob: true,
+                                    gender: true,
+                                    socialmedia: true,
+                                    videocall: true,
+                                    audiocall :true
+                                }
                             };
                             return responseManager.onSuccess("User data", obj, res);
                         }
@@ -324,7 +344,17 @@ router.post('/getone', helper.authenticateToken, async (req, res) => {
                                 createdAt : friendrequest.createdAt,
                                 updatedAt : friendrequest.updatedAt,
                                 timestamp : friendrequest.timestamp,
-                                business : businessData
+                                business : businessData,
+                                permissions : (friendrequest.receiver_scope) ? friendrequest.receiver_scope : {
+                                    fullname: true,
+                                    contactnumber: true,
+                                    email: true,
+                                    dob: true,
+                                    gender: true,
+                                    socialmedia: true,
+                                    videocall: true,
+                                    audiocall :true
+                                }
                             };
                             if(friendrequest.sender_scope.fullname){obj.fullName = friendrequest.senderid.fullName;}
                             if(friendrequest.sender_scope.contactnumber){obj.contact_no = friendrequest.senderid.contact_no;}
@@ -354,7 +384,17 @@ router.post('/getone', helper.authenticateToken, async (req, res) => {
                                 createdAt : friendrequest.createdAt,
                                 updatedAt : friendrequest.updatedAt,
                                 timestamp : friendrequest.timestamp,
-                                business : businessData
+                                business : businessData,
+                                permissions : (friendrequest.receiver_scope) ? friendrequest.receiver_scope : {
+                                    fullname: true,
+                                    contactnumber: true,
+                                    email: true,
+                                    dob: true,
+                                    gender: true,
+                                    socialmedia: true,
+                                    videocall: true,
+                                    audiocall :true
+                                }
                             };
                             return responseManager.onSuccess("User data", obj, res);
                         }
