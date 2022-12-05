@@ -3,6 +3,7 @@ let router = express.Router();
 const mongoConnection = require('../../../utilities/connections');
 const responseManager = require('../../../utilities/response.manager');
 const usersModel = require('../../../models/users.model');
+const businessModel = require("../../../models/business.model");
 const friendrequestsModel = require('../../../models/friendrequests.model');
 const helper = require('../../../utilities/helper');
 const constants = require('../../../utilities/constants');
@@ -89,7 +90,7 @@ router.post('/sendfriendrequest', helper.authenticateToken, async (req, res) => 
                         { $and: [{ receiverid: mongoose.Types.ObjectId(req.token.userid) }, { senderid: mongoose.Types.ObjectId(receiverid) }] },
                         { $and: [{ senderid: mongoose.Types.ObjectId(req.token.userid) }, { receiverid: mongoose.Types.ObjectId(receiverid) }] }
                     ],
-                    status: { $in: [ 'sent', 'accepted', 'blocked' ] }
+                    status: { $in: ['sent', 'accepted', 'blocked'] }
                 }).lean();
                 if (existingFriendRequest == null) {
                     let obj = {
@@ -128,7 +129,7 @@ router.post('/updatefriendrequest', helper.authenticateToken, async (req, res) =
                     if (checkExisting != null) {
                         if (status == 'accepted') {
                             if (checkExisting.status == 'sent') {
-                                await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(checkExisting._id, { status: 'accepted', receiver_scope: authorized_permissions, updatedBy: mongoose.Types.ObjectId(userdata._id)});
+                                await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findByIdAndUpdate(checkExisting._id, { status: 'accepted', receiver_scope: authorized_permissions, updatedBy: mongoose.Types.ObjectId(userdata._id) });
                                 return responseManager.onSuccess("Friend request accepted successfully!", 1, res);
                             } else {
                                 return responseManager.badrequest({ message: 'Invalid status to update friend request, only sent friend request can be accepted , please try again' }, res);
@@ -239,6 +240,136 @@ router.post('/set_authorized_permissions', helper.authenticateToken, async (req,
         }
     } else {
         return responseManager.badrequest({ message: 'Invalid token to set authorized permission, please try again' }, res);
+    }
+});
+router.post('/getone', helper.authenticateToken, async (req, res) => {
+    if (req.token.userid && mongoose.Types.ObjectId.isValid(req.token.userid)) {
+        let primary = mongoConnection.useDb(constants.DEFAULT_DB);
+        let userdata = await primary.model(constants.MODELS.users, usersModel).findById(req.token.userid).lean();
+        if (userdata) {
+            const { friendid } = req.body;
+            if (friendid && friendid != null && friendid != '' && mongoose.Types.ObjectId.isValid(friendid)) {
+                let friendrequest = await primary.model(constants.MODELS.friendrequests, friendrequestsModel).findOne({
+                    $or: [{ senderid: mongoose.Types.ObjectId(req.token.userid), receiverid: mongoose.Types.ObjectId(friendid) },
+                    { senderid: mongoose.Types.ObjectId(friendid), receiverid: mongoose.Types.ObjectId(req.token.userid) }]
+                }).populate([
+                    { path: 'receiverid', model: primary.model(constants.MODELS.users, usersModel)},
+                    { path: 'senderid', model: primary.model(constants.MODELS.users, usersModel)}
+                ]).lean();
+                if (friendrequest && friendrequest != null) {
+                    let businessData = await primary.model(constants.MODELS.business, businessModel).findOne({ userid: mongoose.Types.ObjectId(friendid) }).select('_id businessimage name category subCategory description location interestedCategory interestedSubCategory brochure').lean();
+                    if(friendrequest.senderid._id.toString() == req.token.userid.toString()){
+                        if(friendrequest.receiver_scope){
+                            let obj = {
+                                _id : friendrequest.receiverid._id,
+                                aboutUs : friendrequest.receiverid.aboutUs,
+                                areaRange : friendrequest.receiverid.areaRange,
+                                hobbies : friendrequest.receiverid.hobbies,
+                                nickName : friendrequest.receiverid.nickName,
+                                userName : friendrequest.receiverid.userName,
+                                age : friendrequest.receiverid.age,
+                                interestedin : friendrequest.receiverid.interestedin,
+                                profileimage : friendrequest.receiverid.profileimage,
+                                status : friendrequest.status,
+                                createdAt : friendrequest.createdAt,
+                                updatedAt : friendrequest.updatedAt,
+                                timestamp : friendrequest.timestamp,
+                                business : businessData
+                            };
+                            if(friendrequest.receiver_scope.fullname){obj.fullName = friendrequest.receiverid.fullName;}
+                            if(friendrequest.receiver_scope.contactnumber){obj.contact_no = friendrequest.receiverid.contact_no;}
+                            if(friendrequest.receiver_scope.email){obj.emailId = friendrequest.receiverid.emailId;}
+                            if(friendrequest.receiver_scope.dob){obj.dob = friendrequest.receiverid.dob;}
+                            if(friendrequest.receiver_scope.gender){obj.gender = friendrequest.receiverid.gender;}
+                            if(friendrequest.receiver_scope.socialmedia){obj.socialMediaLinks = friendrequest.receiverid.socialMediaLinks;}
+                            return responseManager.onSuccess("User data", obj, res);
+                        }else{
+                            let obj = {
+                                _id : friendrequest.receiverid._id,
+                                contact_no : friendrequest.receiverid.contact_no,
+                                aboutUs : friendrequest.receiverid.aboutUs,
+                                areaRange : friendrequest.receiverid.areaRange,
+                                emailId : friendrequest.receiverid.emailId,
+                                fullName : friendrequest.receiverid.fullName,
+                                hobbies : friendrequest.receiverid.hobbies,
+                                nickName : friendrequest.receiverid.nickName,
+                                socialMediaLinks : friendrequest.receiverid.socialMediaLinks,
+                                userName : friendrequest.receiverid.userName,
+                                age : friendrequest.receiverid.age,
+                                gender : friendrequest.receiverid.gender,
+                                dob : friendrequest.receiverid.dob,
+                                interestedin : friendrequest.receiverid.interestedin,
+                                profileimage : friendrequest.receiverid.profileimage,
+                                status : friendrequest.status,
+                                createdAt : friendrequest.createdAt,
+                                updatedAt : friendrequest.updatedAt,
+                                timestamp : friendrequest.timestamp,
+                                business : businessData
+                            };
+                            return responseManager.onSuccess("User data", obj, res);
+                        }
+                    }else{
+                        if(friendrequest.sender_scope){
+                            let obj = {
+                                _id : friendrequest.senderid._id,
+                                aboutUs : friendrequest.senderid.aboutUs,
+                                areaRange : friendrequest.senderid.areaRange,
+                                hobbies : friendrequest.senderid.hobbies,
+                                nickName : friendrequest.senderid.nickName,
+                                userName : friendrequest.senderid.userName,
+                                age : friendrequest.senderid.age,
+                                interestedin : friendrequest.senderid.interestedin,
+                                profileimage : friendrequest.senderid.profileimage,
+                                status : friendrequest.status,
+                                createdAt : friendrequest.createdAt,
+                                updatedAt : friendrequest.updatedAt,
+                                timestamp : friendrequest.timestamp,
+                                business : businessData
+                            };
+                            if(friendrequest.sender_scope.fullname){obj.fullName = friendrequest.senderid.fullName;}
+                            if(friendrequest.sender_scope.contactnumber){obj.contact_no = friendrequest.senderid.contact_no;}
+                            if(friendrequest.sender_scope.email){obj.emailId = friendrequest.senderid.emailId;}
+                            if(friendrequest.sender_scope.dob){obj.dob = friendrequest.senderid.dob;}
+                            if(friendrequest.sender_scope.gender){obj.gender = friendrequest.senderid.gender;}
+                            if(friendrequest.sender_scope.socialmedia){obj.socialMediaLinks = friendrequest.senderid.socialMediaLinks;}
+                            return responseManager.onSuccess("User data", obj, res);
+                        }else{
+                            let obj = {
+                                _id : friendrequest.senderid._id,
+                                contact_no : friendrequest.senderid.contact_no,
+                                aboutUs : friendrequest.senderid.aboutUs,
+                                areaRange : friendrequest.senderid.areaRange,
+                                emailId : friendrequest.senderid.emailId,
+                                fullName : friendrequest.senderid.fullName,
+                                hobbies : friendrequest.senderid.hobbies,
+                                nickName : friendrequest.senderid.nickName,
+                                socialMediaLinks : friendrequest.senderid.socialMediaLinks,
+                                userName : friendrequest.senderid.userName,
+                                age : friendrequest.senderid.age,
+                                gender : friendrequest.senderid.gender,
+                                dob : friendrequest.senderid.dob,
+                                interestedin : friendrequest.senderid.interestedin,
+                                profileimage : friendrequest.senderid.profileimage,
+                                status : friendrequest.status,
+                                createdAt : friendrequest.createdAt,
+                                updatedAt : friendrequest.updatedAt,
+                                timestamp : friendrequest.timestamp,
+                                business : businessData
+                            };
+                            return responseManager.onSuccess("User data", obj, res);
+                        }
+                    }
+                } else {
+                    return responseManager.badrequest({ message: 'Invalid friend id to get user details, please try again' }, res);
+                }
+            } else {
+                return responseManager.badrequest({ message: 'Invalid friend id to get user details, please try again' }, res);
+            }
+        } else {
+            return responseManager.badrequest({ message: 'Invalid token to get user details, please try again' }, res);
+        }
+    } else {
+        return responseManager.badrequest({ message: 'Invalid token to get user details, please try again' }, res);
     }
 });
 module.exports = router;
